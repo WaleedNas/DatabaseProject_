@@ -1,0 +1,81 @@
+﻿@page "/login"
+@layout LoginLayout
+<head>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Arial', sans-serif;
+            background-color: #f9ece6;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .login-container {
+            background-color: #9a7b4f;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            width: 30rem;
+            margin-bottom: 10rem;
+        }
+
+            .login-container h1 {
+                color: #432616;
+            }
+
+        .login-form {
+            margin-top: 20px;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+            .form-group label {
+                display: block;
+                margin-bottom: 5px;
+                color: #f9ece6;
+            }
+
+            .form-group input {
+                width: 100%;
+                padding: 8px;
+                border: 1px solid #f9ece6;
+                border-radius: 4px;
+            }
+
+            .form-group button {
+                background-color: #f9ece6;
+                color: #432616;
+                padding: 10px;
+                border: none;
+                border-radius: 4px;
+                cursor: pointer;
+            }
+    </style>
+</head>
+<body>
+    <div class="login-container">
+        <h1>Login</h1>
+        <form class="login-form">
+            <div class="form-group">
+                <label for="username">Username</label>
+                <input type="text" id="username" name="username" required>
+            </div>
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input type="password" id="password" name="password" required>
+            </div>
+            <div class="btn-box">
+                <button type="submit">Login</button>
+            </div>
+        </form>
+    </div>
+</body>
+@code {
+
+}
