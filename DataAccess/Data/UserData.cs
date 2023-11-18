@@ -18,7 +18,7 @@ public class UserData : DataContext, IUserData
     {
         var results = await _db.LoadData<User, dynamic>("dbo.spUser_Get", new
         {
-            UserID = userId
+            UserId = userId
         });
 
         if(!results.Any())
@@ -26,12 +26,13 @@ public class UserData : DataContext, IUserData
 
         return results.FirstOrDefault();
     }
+
     public async Task<User?> GetUserByLogin(string username, string password)
     {
         var results = await _db.LoadData<User, dynamic>("dbo.spUser_GetByLogin", new
         {
-            username,
-            password
+            Username = username,
+            Password = password
         });
 
         if(!results.Any())
@@ -43,9 +44,13 @@ public class UserData : DataContext, IUserData
     public async Task<int> InsertUser(User user)
     {
         // Check if user already exists
-        if (await GetUserByLogin(user.Username, user.Password) != null)
-            throw new UserAlreadyExistsException("User already exists");
-
+        try
+        {
+            if (await GetUserByLogin(user.Username, user.PasswordHash) != null)
+                throw new UserAlreadyExistsException("User already exists");
+        }
+        catch(UserNotFoundException e) {}
+        
         return await _db.SaveData("dbo.spUser_Insert", user); // returns new user id
     }
 
@@ -56,7 +61,7 @@ public class UserData : DataContext, IUserData
 
     public async Task<int> DeleteUser(int userId)
     {
-        return await _db.SaveData("dbo.spUser_Delete", new { UserID = userId }); // returns user id
+        return await _db.SaveData("dbo.spUser_Delete", new { UserId = userId }); // returns user id
     }
 
     // User already exists exception

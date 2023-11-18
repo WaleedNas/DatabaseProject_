@@ -1,6 +1,7 @@
 ﻿@page "/"
 @inject NavigationManager navManager
 @inject DataAccess.DBAccess.ISqlDataAccess db
+@inject IUserData userData
 
 <PageTitle>VBStore</PageTitle>
 
@@ -13,10 +14,10 @@
             <div class="row">
                 <div class="col-md-7">
                 <div class="detail-box">
-                    @if(userModel.Fname != "")
+                    @if(userModel.FirstName != string.Empty)
 					{
 						<h1>
-							Welcome @userModel.Fname
+							Welcome @userModel.FirstName
 						</h1>
 					}
 					else
@@ -112,6 +113,10 @@
             var userData = new UserData(db);
             userModel = await userData.GetUser(Id);
         }
+        userModel = await userData.GetUser(Id);
+
+
+
 
         var bookData = new BookData(db);
         books = await bookData.GetBooks();

@@ -31,6 +31,19 @@ namespace DataAccess.Data
             return results;
         }
 
+        public async Task<IEnumerable<Book>> GetBooksByAuthor(int authorId)
+        {
+            var results = await _db.LoadData<Book, dynamic>("dbo.spBook_GetByAuthor", new
+            {
+                AuthorId = authorId
+            });
+
+            if (!results.Any())
+                throw new BookNotFoundException("Book not found");
+
+            return results;
+        }
+
         public async Task<int> InsertBook(Book book)
         {
             return await _db.SaveData("dbo.spBook_Insert", book); // returns new book id

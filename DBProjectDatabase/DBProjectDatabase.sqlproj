@@ -58,12 +58,47 @@
     <Folder Include="Properties" />
     <Folder Include="dbo" />
     <Folder Include="dbo\Tables" />
+    <Folder Include="dbo\StoredProcedures" />
+    <Folder Include="dbo\StoredProcedures\User" />
+    <Folder Include="dbo\StoredProcedures\Book" />
+    <Folder Include="dbo\StoredProcedures\Order" />
+    <Folder Include="dbo\StoredProcedures\OrderItem" />
+    <Folder Include="dbo\StoredProcedures\Author" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="dbo\Tables\Book.sql" />
     <Build Include="dbo\Tables\Order.sql" />
     <Build Include="dbo\Tables\OrderItem.sql" />
     <Build Include="dbo\Tables\User.sql" />
+    <Build Include="dbo\StoredProcedures\User\spUser_Get.sql" />
+    <Build Include="dbo\StoredProcedures\User\spUser_GetByLogin.sql" />
+    <Build Include="dbo\StoredProcedures\User\spUser_Insert.sql" />
+    <Build Include="dbo\StoredProcedures\User\spUser_Update.sql" />
+    <Build Include="dbo\StoredProcedures\User\spUser_Delete.sql" />
+    <Build Include="dbo\StoredProcedures\Book\spBook_Get.sql" />
+    <Build Include="dbo\StoredProcedures\Book\spBook_GetAll.sql" />
+    <Build Include="dbo\StoredProcedures\Book\spBook_Insert.sql" />
+    <Build Include="dbo\StoredProcedures\Book\spBook_Update.sql" />
+    <Build Include="dbo\StoredProcedures\Book\spBook_Delete.sql" />
+    <Build Include="dbo\StoredProcedures\Order\spOrder_Get.sql" />
+    <Build Include="dbo\StoredProcedures\Order\spOrder_GetByUser.sql" />
+    <Build Include="dbo\StoredProcedures\Order\spOrder_Insert.sql" />
+    <Build Include="dbo\StoredProcedures\Order\spOrder_Update.sql" />
+    <Build Include="dbo\StoredProcedures\Order\spOrder_Delete.sql" />
+    <Build Include="dbo\StoredProcedures\OrderItem\spOrderItem_Get.sql" />
+    <Build Include="dbo\StoredProcedures\OrderItem\spOrderItem_GetAllInOrder.sql" />
+    <Build Include="dbo\StoredProcedures\OrderItem\spOrderItem_Insert.sql" />
+    <Build Include="dbo\StoredProcedures\OrderItem\spOrderItem_Update.sql" />
+    <Build Include="dbo\StoredProcedures\OrderItem\spOrderItem_Delete.sql" />
+    <Build Include="dbo\Tables\Author.sql" />
+    <Build Include="dbo\Tables\BookAuthors.sql" />
+    <Build Include="dbo\StoredProcedures\Author\spAuthor_Get.sql" />
+    <Build Include="dbo\StoredProcedures\Author\spAuthor_GetByName.sql" />
+    <Build Include="dbo\StoredProcedures\Author\spAuthor_Insert.sql" />
+    <Build Include="dbo\StoredProcedures\Author\spAuthor_Update.sql" />
+    <Build Include="dbo\StoredProcedures\Author\spAuthor_Delete.sql" />
+    <Build Include="dbo\StoredProcedures\Book\spBook_GetByAuthor.sql" />
+    <Build Include="dbo\StoredProcedures\Author\spAuthor_GetByBook.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="DBProjectDatabase.publish.xml" />

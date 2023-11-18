@@ -25,9 +25,12 @@ namespace DataAccess.Data
             return results.FirstOrDefault();
         }
 
-        public async Task<IEnumerable<Order>> GetOrders()
+        public async Task<IEnumerable<Order>> GetOrdersByUser(int userId)
         {
-            var results = await _db.LoadData<Order, dynamic>("dbo.spOrder_GetAll", new { });
+            var results = await _db.LoadData<Order, dynamic>("dbo.spOrder_GetByUser", new
+            {
+                UserId = userId
+            });
 
             if (!results.Any())
                 throw new OrderNotFoundException("Order not found");
@@ -47,7 +50,7 @@ namespace DataAccess.Data
 
         public async Task<int> DeleteOrder(int orderId)
         {
-            return await _db.SaveData("dbo.spOrder_Delete", new { OrderId = orderId }); // returns order id
+            return await _db.SaveData("dbo.spOrder_Delete", new { OrderId = orderId });
         }
 
         // Order not found exception
