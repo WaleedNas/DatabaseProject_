@@ -95,7 +95,15 @@
         try
         {
             var response = await userData.GetUserByLogin(userModel.Username, userModel.Password);
-            navManager.NavigateTo("/?" + response.UserId);
+            if (response.Type == UserType.User)
+            {
+                navManager.NavigateTo("/?" + response.UserId);
+
+            }
+            else
+            {
+                navManager.NavigateTo("/Admin?" + response.UserId);
+            }
         }
         catch (Exception e)
         {

@@ -56,35 +56,38 @@
     </h2>
     </div>
     <div class="row">
-    <div class="col-sm-6 col-md-4 col-lg-3">
-        <div class="box">
-        <a href="">
-            <div class="img-box">
-            <img src="images/p1.png" alt="">
-            </div>
-            <div class="detail-box">
-            <h6>
-                Ring
-            </h6>
-            <h6>
-                Price
-                <span>
-                $200
-                </span>
-            </h6>
-            </div>
-            <div class="new">
-            <span>
-                New
-            </span>
-            </div>
-        </a>
-        </div>
-    </div>
+        @foreach(Book book in books)
+            {
+            <div class="col-sm-6 col-md-4 col-lg-3">
+                <div class="box">
+                    <a href="">
+                        <div class="img-box">
+                            <img src="@book.CoverImage" alt="Book Cover">
+                        </div>
+                        <div class="detail-box">
+                            <h6>
+                                @book.Title
+                            </h6>
+                            <h6>
+                                Price
+                                <span>
+                                $@book.Price
+                                </span>
+                            </h6>
+                        </div>
+                        <div class="new">
+                            <span>
+                                New
+                            </span>
+                        </div>
+                    </a>
+                </div>
+            </div>  
+            }
     
     </div>
     <div class="btn-box">
-    <a href="">
+    <a href="/shop">
         View All Products
     </a>
     </div>
@@ -94,6 +97,8 @@
 @code {
     int Id;
     User userModel = new User();
+    IEnumerable<Book> books = new List<Book>();
+
 
     protected override async Task OnInitializedAsync()
     {
@@ -104,14 +109,12 @@
         if (!string.IsNullOrWhiteSpace(queryString))
         {
             Id = int.Parse(queryString.Substring(1));
+            var userData = new UserData(db);
+            userModel = await userData.GetUser(Id);
         }
 
-        var userData = new UserData(db);
-        userModel = await userData.GetUser(Id);
-
-
-
-
+        var bookData = new BookData(db);
+        books = await bookData.GetBooks();
     }
 
 }

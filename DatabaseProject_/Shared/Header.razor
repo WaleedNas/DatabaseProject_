@@ -1,5 +1,6 @@
 ﻿@inject Microsoft.AspNetCore.Http.IHttpContextAccessor Accessor
 @inject NavigationManager NavigationManager
+@inject DataAccess.DBAccess.ISqlDataAccess db
 
 <div class="header_section">
     <nav class="navbar navbar-expand-lg custom_nav-container ">
@@ -12,7 +13,6 @@
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav">
                 <li class="nav-item @(IsActive("/"))">
-                    @**@
                     <NavLink class="nav-link" href="/">
                         Home
                     </NavLink>
@@ -29,14 +29,25 @@
                 </li>
             </ul>
             <div class="user_option">
-                <a href="/login">
-                    <span>
-                        Login
-                    </span>
-                </a>
-                @*<a href="">
-                    <i class="fa fa-shopping-bag" aria-hidden="true"></i> @*logo for cart*@
-                @*</a>*@
+                @if (userModel.Fname != "")
+                {
+                    <a href="/login" @onclick="HandleLogout">
+                        <span>
+                            Logout
+                        </span>
+                    </a>
+                    <a href="">
+                        <i class="fa fa-shopping-bag" aria-hidden="true"></i> @*logo for cart*@
+                    </a>
+                }
+                else
+                {
+                    <a href="/login">
+                        <span>
+                            Login
+                        </span>
+                    </a>
+                }
                 
             </div>
         </div>
@@ -44,10 +55,26 @@
 </div>
 
 @code {
-    protected override void OnInitialized()
+
+    int Id;
+    User userModel = new User();
+
+    protected override async Task OnInitializedAsync()
     {
         NavigationManager.LocationChanged += HandleLocationChanged;
+        var uri = new Uri(NavigationManager.Uri);
+
+        var queryString = uri.Query;
+
+        if (!string.IsNullOrWhiteSpace(queryString))
+        {
+            Id = int.Parse(queryString.Substring(1));
+            var userData = new UserData(db);
+            userModel = await userData.GetUser(Id);
+        }
+
     }
+
 
     private void HandleLocationChanged(object sender, LocationChangedEventArgs e)
     {
@@ -57,5 +84,10 @@
     private string IsActive(string path)
     {
         return NavigationManager.Uri.EndsWith(path, StringComparison.OrdinalIgnoreCase) ? "active" : "";
+    }
+
+    private void HandleLogout()
+    {
+        userModel = new User();
     }
 }
