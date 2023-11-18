@@ -1,6 +1,8 @@
 ﻿@page "/"
+@inject NavigationManager navManager
+@inject DataAccess.DBAccess.ISqlDataAccess db
 
-<PageTitle>Index</PageTitle>
+<PageTitle>VBStore</PageTitle>
 
 <section class="slider_section">
     <div class="slider_container">
@@ -11,13 +13,22 @@
             <div class="row">
                 <div class="col-md-7">
                 <div class="detail-box">
-                    <h1>
-                    Welcome To Our <br>
-                    Virtual BookStore
-                    </h1>
-                    <p>
-                        Your portal to a realm of knowledge, imagination, and endless possibilities. Whether you're an avid reader, a knowledge seeker, or on the hunt for your next great read, you're in the right place.
-                    </p>
+                    @if(userModel.Fname != "")
+					{
+						<h1>
+							Welcome @userModel.Fname
+						</h1>
+					}
+					else
+					{
+						<h1>
+							Welcome To Our <br>
+							Virtual BookStore
+						</h1>
+                        <p>
+                            Your portal to a realm of knowledge, imagination, and endless possibilities. Whether you're an avid reader, a knowledge seeker, or on the hunt for your next great read, you're in the right place.
+                        </p>
+					})
                     <a href="/contact">
                     Contact Us
                     </a>
@@ -80,3 +91,27 @@
 </div>
 </section>
 
+@code {
+    int Id;
+    User userModel = new User();
+
+    protected override async Task OnInitializedAsync()
+    {
+        var uri = new Uri(navManager.Uri);
+
+        var queryString = uri.Query;
+
+        if (!string.IsNullOrWhiteSpace(queryString))
+        {
+            Id = int.Parse(queryString.Substring(1));
+        }
+
+        var userData = new UserData(db);
+        userModel = await userData.GetUser(Id);
+
+
+
+
+    }
+
+}
