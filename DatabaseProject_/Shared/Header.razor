@@ -1,6 +1,7 @@
 ﻿@inject Microsoft.AspNetCore.Http.IHttpContextAccessor Accessor
 @inject NavigationManager NavigationManager
 @inject DataAccess.DBAccess.ISqlDataAccess db
+@inject IUserData userData
 
 <div class="header_section">
     <nav class="navbar navbar-expand-lg custom_nav-container ">
@@ -13,23 +14,18 @@
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav">
                 <li class="nav-item @(IsActive("/"))">
-                    <NavLink class="nav-link" href="/">
+                    <NavLink class="nav-link" @onclick="HandleIndex">
                         Home
                     </NavLink>
                 </li>
                 <li class="nav-item @(IsActive("/shop"))">
-                    <NavLink class="nav-link" href="/shop">
+                    <NavLink class="nav-link" @onclick="HandleShop">
                         Shop
-                    </NavLink>
-                </li>
-                <li class="nav-item @(IsActive("/contact"))">
-                    <NavLink class="nav-link" href="/contact">
-                        Contact Us
                     </NavLink>
                 </li>
             </ul>
             <div class="user_option">
-                @if (userModel.Fname != "")
+                @if (userModel.UserId != 0)
                 {
                     <a href="/login" @onclick="HandleLogout">
                         <span>
@@ -37,7 +33,7 @@
                         </span>
                     </a>
                     <a href="">
-                        <i class="fa fa-shopping-bag" aria-hidden="true"></i> @*logo for cart*@
+                        <i class="fa fa-shopping-bag" aria-hidden="true">Cart</i> @*logo for cart*@
                     </a>
                 }
                 else
@@ -65,16 +61,31 @@
         var uri = new Uri(NavigationManager.Uri);
 
         var queryString = uri.Query;
-
         if (!string.IsNullOrWhiteSpace(queryString))
         {
             Id = int.Parse(queryString.Substring(1));
-            var userData = new UserData(db);
+        }
+        try
+        {
+
             userModel = await userData.GetUser(Id);
+        }
+        catch (Exception e)
+        {
+
         }
 
     }
 
+    private void HandleShop()
+    {
+        NavigationManager.NavigateTo("/shop?" + Id);
+    }
+
+    private void HandleIndex()
+    {
+        NavigationManager.NavigateTo("/?" + Id);
+    }
 
     private void HandleLocationChanged(object sender, LocationChangedEventArgs e)
     {

@@ -19,7 +19,7 @@
                 <div class="detail-box">
                     
 						<h1>
-							Welcome @userModel.Fname
+							Welcome @userModel.FirstName
 						</h1>
 					
 					
@@ -64,7 +64,7 @@
             Id = int.Parse(queryString.Substring(1));
             var userData = new UserData(db);
             userModel = await userData.GetUser(Id);
-            if (userModel.Type == UserType.User)
+            if (userModel.UserType == UserType.User)
             {
                 notAdmin = true;
             }

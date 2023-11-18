@@ -2,6 +2,7 @@
 @inject NavigationManager navManager
 @inject DataAccess.DBAccess.ISqlDataAccess db
 @inject IUserData userData
+@inject IJSRuntime JS
 
 <PageTitle>VBStore</PageTitle>
 
@@ -14,7 +15,7 @@
             <div class="row">
                 <div class="col-md-7">
                 <div class="detail-box">
-                    @if(userModel.FirstName != string.Empty)
+                    @if(userModel.UserId != 0)
 					{
 						<h1>
 							Welcome @userModel.FirstName
@@ -29,7 +30,7 @@
                         <p>
                             Your portal to a realm of knowledge, imagination, and endless possibilities. Whether you're an avid reader, a knowledge seeker, or on the hunt for your next great read, you're in the right place.
                         </p>
-					})
+					}
                     <a href="/contact">
                     Contact Us
                     </a>
@@ -103,23 +104,31 @@
 
     protected override async Task OnInitializedAsync()
     {
-        var uri = new Uri(navManager.Uri);
-
-        var queryString = uri.Query;
-
-        if (!string.IsNullOrWhiteSpace(queryString))
+        try
         {
-            Id = int.Parse(queryString.Substring(1));
-            var userData = new UserData(db);
-            userModel = await userData.GetUser(Id);
+            var uri = new Uri(navManager.Uri);
+
+            var queryString = uri.Query;
+            if (!string.IsNullOrWhiteSpace(queryString))
+            {
+                Id = int.Parse(queryString.Substring(1));
+            }
+            try
+            {
+
+                userModel = await userData.GetUser(Id);
+            } catch(Exception e)
+            {
+
+            }
+            await JS.InvokeVoidAsync("console.log", userModel);
+            var bookData = new BookData(db);
+            books = await bookData.GetBooks();
+        }catch(Exception e)
+        {
+            //Armando
+            //RDI16WYN4BT
         }
-        userModel = await userData.GetUser(Id);
-
-
-
-
-        var bookData = new BookData(db);
-        books = await bookData.GetBooks();
     }
 
 }
