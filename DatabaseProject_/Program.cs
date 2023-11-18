@@ -1,5 +1,8 @@
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
+using DataAccess.DBAccess;
+using DataAccess.Data;
+using DataAccess.Data.Interfaces;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -7,7 +10,13 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddRazorPages();
 builder.Services.AddServerSideBlazor();
 builder.Services.AddHttpContextAccessor();
-builder.Services.AddTransient<DataAccess.DBAccess.ISqlDataAccess, DataAccess.DBAccess.SqlDataAccess>();
+builder.Services.AddSingleton<ISqlDataAccess, SqlDataAccess>();
+
+builder.Services.AddSingleton<IUserData, UserData>();
+builder.Services.AddSingleton<IBookData, BookData>();
+builder.Services.AddSingleton<IOrderData, OrderData>();
+builder.Services.AddSingleton<IOrderItemData, OrderItemData>();
+
 
 var app = builder.Build();
 

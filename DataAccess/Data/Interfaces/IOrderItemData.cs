@@ -8,6 +8,6 @@ namespace DataAccess.Data.Interfaces
         Task<IEnumerable<OrderItem>> GetOrderItems(int orderId);
         Task<int> InsertOrderItem(OrderItem order);
         Task<int> UpdateOrderItem(OrderItem order);
-        Task<int> DeleteOrderItem(int orderId);
+        Task<int> DeleteOrderItem(int orderId, int bookId);
     }
 }

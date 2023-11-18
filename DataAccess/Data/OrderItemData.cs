@@ -48,9 +48,9 @@ namespace DataAccess.Data
             return await _db.SaveData("dbo.spOrderItem_Update", order); // returns book id
         }
 
-        public async Task<int> DeleteOrderItem(int orderId)
+        public async Task<int> DeleteOrderItem(int orderId, int bookId)
         {
-            return await _db.SaveData("dbo.spOrderItem_Delete", new {OrderId = orderId}); // returns book id
+            return await _db.SaveData("dbo.spOrderItem_Delete", new {OrderId = orderId, BookId = bookId}); // returns book id
         }
 
         // Order not found exception
