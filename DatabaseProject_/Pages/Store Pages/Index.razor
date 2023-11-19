@@ -125,7 +125,7 @@
             }
             IEnumerable<Book> booksI = await bookData.GetBooks();
             books = booksI.ToList();
-            await JS.InvokeVoidAsync("console.log", books);
+            //await JS.InvokeVoidAsync("console.log", books);
         }catch(Exception e)
         {
             //Armando
