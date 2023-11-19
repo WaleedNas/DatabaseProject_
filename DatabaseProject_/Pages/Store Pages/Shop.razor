@@ -21,7 +21,7 @@
                     <div class="box">
                         <a href="">
                             <div class="img-box">
-                                <img src="@book.CoverImage" alt="Book Cover">
+                                <img src=@($"data:image/Bmp;base64,{Convert.ToBase64String(book.CoverImage)}") alt="Book Cover">
                             </div>
                             <div class="detail-box">
                                 <h6>
@@ -72,7 +72,6 @@
             }
             try
             {
-
                 userModel = await userData.GetUser(Id);
             }
             catch (Exception e)
