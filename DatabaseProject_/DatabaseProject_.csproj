@@ -17,8 +17,14 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Pages\AdminPages\Book\" />
-    <Folder Include="Pages\AdminPages\User\" />
+    <Folder Include="Pages\AdminPages\BookPages\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="Pages\AdminPages\UserDelete.razor" />
+    <None Include="Pages\AdminPages\UserDetails.razor" />
+    <None Include="Pages\AdminPages\UserCreate.razor" />
+    <None Include="Pages\AdminPages\UserEdit.razor" />
   </ItemGroup>
 
 </Project>

@@ -101,7 +101,7 @@
 @code {
     int Id;
     User userModel = new User();
-    IEnumerable<Book> books = new List<Book>();
+    List<Book> books = new List<Book>();
     Book book = new Book();
     int count = 0;
 
@@ -119,12 +119,12 @@
             try
             {
                 userModel = await userData.GetUser(Id);
-                books = await bookData.GetBooks();
-
             } catch(Exception e)
             {
 
             }
+            IEnumerable<Book> booksI = await bookData.GetBooks();
+            books = booksI.ToList();
             await JS.InvokeVoidAsync("console.log", books);
         }catch(Exception e)
         {

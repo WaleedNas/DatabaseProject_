@@ -36,25 +36,22 @@
             </tr>
         </thead>
         <tbody>
-            @foreach (var user in Model.FixedAssetsMaster)
+            @foreach (User user in users)
             {
                 <tr>
                     <td>
-                        @Html.DisplayFor(modelItem => item.FixedAssetName)
+                        @user.Username
                     </td>
                     <td>
-                        @Html.DisplayFor(modelItem => item.Price)
+                        @user.Email
                     </td>
                     <td>
-                        @Html.DisplayFor(modelItem => item.Qty)
+                        @user.UserType
                     </td>
                     <td>
-                        @Html.DisplayFor(modelItem => item.AcquiredDate)
-                    </td>
-                    <td>
-                        <a class="btn btn-primary" asp-page="./Edit" asp-route-id="@item.FixedAssetId">Edit</a> |
-                        <a class="btn btn-primary" asp-page="./Details" asp-route-id="@item.FixedAssetId">Details</a> |
-                        <a class="btn btn-danger" asp-page="./Delete" asp-route-id="@item.FixedAssetId">Delete</a>
+                        <NavLink class="btn btn-primary" asp-page="User/Edit" asp-route-id="@user.UserId">Edit</NavLink> |
+                        <NavLink class="btn btn-primary" asp-page="User/Details" asp-route-id="@user.UserId">Details</NavLink> |
+                        <NavLink class="btn btn-danger" asp-page="User/Delete" asp-route-id="@user.UserId">Delete</NavLink>
                     </td>
                 </tr>
             }
@@ -66,10 +63,8 @@
 
 @code {
     int Id;
-    User userModel = new User();
-    IEnumerable<Book> books = new List<Book>();
     bool notAdmin = false;
-    IEnumerable<User> users = new List<User>();
+    List<User> users = new List<User>();
 
     protected override async Task OnInitializedAsync()
     {
@@ -80,11 +75,8 @@
         if (!string.IsNullOrWhiteSpace(queryString))
         {
             Id = int.Parse(queryString.Substring(1));
-            userModel = await userData.GetUser(Id);
         }
 
-        //books = await bookData.GetBooks();
-        //await JS.InvokeVoidAsync("console.log", books);
     }
 
 }
