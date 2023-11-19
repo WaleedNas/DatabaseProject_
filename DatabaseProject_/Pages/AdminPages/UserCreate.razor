@@ -1,0 +1,72 @@
+﻿@page "/UserCreate"
+@inject NavigationManager navManager
+@inject IUserData userData
+@inject IJSRuntime JS
+
+<h1>Add User</h1>
+
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <EditForm Model="userModel" method="post">
+            <div class="group-left">
+                <div class="form-group">
+                    <label for="username">First Name</label>
+                    <InputText @bind-value="userModel.FirstName" type="text" id="firstname" name="firstname" required />
+                </div>
+                <div class="form-group">
+                    <label for="password">Last Name</label>
+                    <InputText @bind-value="userModel.LastName" type="text" id="lastname" name="lastname" required />
+                </div>
+                <div class="form-group">
+                    <label for="username">Username</label>
+                    <InputText @bind-value="userModel.Username" type="text" id="username" name="username" required />
+                </div>
+                
+            </div>
+            <div class="group-right">
+
+                <div class="form-group">
+                    <label for="password">Email</label>
+                    <InputText @bind-value="userModel.Email" type="text" id="email" name="email" required />
+                </div>
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <InputText @bind-value="userModel.PasswordHash" type="password" id="pass" name="pass" required />
+                </div>
+                <div class="form-group">
+                    <label for="type">Type</label>
+                    <InputSelect TValue="UserType" Value="type" ValueExpression="() => type" required>
+                         <option value="@UserType.User">User</option>
+                         <option value="@UserType.Admin">Admin</option>
+                    </InputSelect>
+                </div>
+            </div>
+            <div class="form-group">
+                <input style="margin:10px 0 10px 0" type="submit" value="Create" class="btn btn-primary" />
+            </div>
+        </EditForm>
+    </div>
+</div>
+
+<div>
+    <a class="btn btn-primary" href="javascript: history.go(-1)">Back to List</a>
+</div>
+@code {
+    User userModel = new User();
+    UserType type;
+    private async Task HandleSubmit()
+    {
+        userModel.UserType = type;
+        try
+        {
+            var response = await userData.InsertUser(userModel);
+
+        }catch(Exception e)
+        {
+            
+        }
+
+    }
+
+}
