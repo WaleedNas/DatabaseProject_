@@ -1,0 +1,136 @@
+﻿@page "/"
+@inject NavigationManager navManager
+@inject IUserData userData
+@inject IBookData bookData
+@inject IJSRuntime JS
+
+<PageTitle>VBStore</PageTitle>
+
+<section class="slider_section">
+    <div class="slider_container">
+    <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
+        <div class="carousel-inner">
+        <div class="carousel-item active">
+            <div class="container-fluid">
+            <div class="row">
+                <div class="col-md-7">
+                <div class="detail-box">
+                    @if(userModel.UserId != 0)
+					{
+						<h1>
+							Welcome @userModel.FirstName
+						</h1>
+					}
+					else
+					{
+						<h1>
+							Welcome To Our <br>
+							Virtual BookStore
+						</h1>
+                        <p>
+                            Your portal to a realm of knowledge, imagination, and endless possibilities. Whether you're an avid reader, a knowledge seeker, or on the hunt for your next great read, you're in the right place.
+                        </p>
+					}
+                    <a href="/contact">
+                    Contact Us
+                    </a>
+                </div>
+                </div>
+                <div class="col-md-5 ">
+                <div class="img-box">
+                    <img src="images/slider-img.png" alt="" />
+                </div>
+                </div>
+            </div>
+            </div>
+        </div>
+        </div>
+    </div>
+    </div>
+</section>
+
+
+<section class="shop_section layout_padding">
+<div class="container">
+    <div class="heading_container heading_center">
+    <h2>
+        Popular Books
+    </h2>
+    </div>
+    <div class="row">
+        @foreach(Book book in books)
+            {
+                if (count >= 3) break;
+            <div class="col-sm-6 col-md-4 col-lg-3">
+                <div class="box">
+                    <a href="">
+                        <div class="img-box">
+                            <img src="@book.CoverImage" alt="Book Cover">
+                        </div>
+                        <div class="detail-box">
+                            <h6>
+                                @book.Title
+                            </h6>
+                            <h6>
+                                Price
+                                <span>
+                                $@book.Price
+                                </span>
+                            </h6>
+                        </div>
+                        <div class="new">
+                            <span>
+                                New
+                            </span>
+                        </div>
+                    </a>
+                </div>
+            </div>  
+             count += 1;
+            }
+    
+    </div>
+    <div class="btn-box">
+    <a href="/shop">
+        View All Products
+    </a>
+    </div>
+</div>
+</section>
+
+@code {
+    int Id;
+    User userModel = new User();
+    IEnumerable<Book> books = new List<Book>();
+    Book book = new Book();
+    int count = 0;
+
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+            var uri = new Uri(navManager.Uri);
+
+            var queryString = uri.Query;
+            if (!string.IsNullOrWhiteSpace(queryString))
+            {
+                Id = int.Parse(queryString.Substring(1));
+            }
+            try
+            {
+                userModel = await userData.GetUser(Id);
+                books = await bookData.GetBooks();
+
+            } catch(Exception e)
+            {
+
+            }
+            await JS.InvokeVoidAsync("console.log", books);
+        }catch(Exception e)
+        {
+            //Armando
+            //RDI16WYN4BT
+        }
+    }
+
+}

@@ -1,6 +1,6 @@
 ﻿@page "/login"
 @layout LoginLayout
-@inject DataAccess.DBAccess.ISqlDataAccess db
+@inject IUserData userData
 @inject NavigationManager navManager
 
 <head>
@@ -67,11 +67,11 @@
         <EditForm Model="userModel"class="login-form">
             <div class="form-group">
                 <label for="username">Username</label>
-                <InputText @bind-value="userModel.Username" type="text" id="username" name="username" required />
+                <InputText ValueExpression="@( () => userModel.Username )" @bind-value="userModel.Username" type="text" id="username" name="username" required />
             </div>
             <div class="form-group">
                 <label for="password">Password</label>
-                <InputText @bind-value="userModel.Password"  type="password" id="password" name="password" require />
+                <InputText ValueExpression="@( () => userModel.Password )" @bind-value="userModel.Password" type="password" id="password" name="password" require />
             </div>
             <div class="btn-box">
                 <button @onclick="HandleSubmit" type="submit">Login</button>
@@ -91,11 +91,18 @@
     private async Task HandleSubmit()
     {
         message = "Loading...";
-        var userData = new UserData(db);
         try
         {
             var response = await userData.GetUserByLogin(userModel.Username, userModel.Password);
-            navManager.NavigateTo("/?" + response.UserId);
+            if (response.UserType == UserType.User)
+            {
+                navManager.NavigateTo("/?" + response.UserId);
+
+            }
+            else
+            {
+                navManager.NavigateTo("/Admin?" + response.UserId);
+            }
         }
         catch (Exception e)
         {
