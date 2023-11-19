@@ -12,18 +12,36 @@
         </a>
 
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
-            <ul class="navbar-nav">
-                <li class="nav-item @(IsActive("/"))">
-                    <NavLink class="nav-link" @onclick="HandleIndex">
-                        Home
-                    </NavLink>
-                </li>
-                <li class="nav-item @(IsActive("/shop"))">
-                    <NavLink class="nav-link" @onclick="HandleShop">
-                        Shop
-                    </NavLink>
-                </li>
-            </ul>
+
+            @if (userModel.UserType == UserType.Admin)
+                {
+                <ul class="navbar-nav">
+                    <li class="nav-item @(IsActive("/"))">
+                        <NavLink class="nav-link" @onclick="HandleIndexAdmin">
+                            Home
+                        </NavLink>
+                    </li>
+                </ul>
+                <span> Welcome @userModel.Username </span>
+                
+                } else
+                {
+                
+                <ul class="navbar-nav">
+                    <li class="nav-item @(IsActive("/"))">
+                        <NavLink class="nav-link" @onclick="HandleIndex">
+                            Home
+                        </NavLink>
+                    </li>
+                    <li class="nav-item @(IsActive("/shop"))">
+                        <NavLink class="nav-link" @onclick="HandleShop">
+                            Shop
+                        </NavLink>
+                    </li>
+                </ul>
+
+                }
+            
             <div class="user_option">
                 @if (userModel.UserId != 0)
                 {
@@ -74,7 +92,6 @@
         {
 
         }
-
     }
 
     private void HandleShop()
@@ -86,6 +103,11 @@
     {
         NavigationManager.NavigateTo("/?" + Id);
     }
+    private void HandleIndexAdmin()
+    {
+        NavigationManager.NavigateTo("/Admin?" + Id);
+    }
+
 
     private void HandleLocationChanged(object sender, LocationChangedEventArgs e)
     {

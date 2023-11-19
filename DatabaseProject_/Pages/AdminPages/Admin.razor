@@ -1,0 +1,90 @@
+﻿@page "/Admin"
+@inject NavigationManager navManager
+@inject IUserData userData
+@inject IBookData bookData
+@inject IJSRuntime JS
+
+<PageTitle>VBStore</PageTitle>
+@if (notAdmin)
+{
+    <h1>Unauthorized Access</h1>
+} else
+{
+    <h1>Users</h1>
+
+    <p>
+        <a style="margin:10px 0 20px 0" class="btn btn-primary" asp-page="Create">Add User</a>
+        <a style="color:#040404" class="btn btn-link" href="/Location/Index">Books</a>
+    </p>
+
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>
+                    Username
+                </th>
+                <th>
+                    Email
+                </th>
+                <th>
+                    Account Type
+                </th>
+
+
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var user in Model.FixedAssetsMaster)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.FixedAssetName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Price)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Qty)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.AcquiredDate)
+                    </td>
+                    <td>
+                        <a class="btn btn-primary" asp-page="./Edit" asp-route-id="@item.FixedAssetId">Edit</a> |
+                        <a class="btn btn-primary" asp-page="./Details" asp-route-id="@item.FixedAssetId">Details</a> |
+                        <a class="btn btn-danger" asp-page="./Delete" asp-route-id="@item.FixedAssetId">Delete</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+}
+
+
+@code {
+    int Id;
+    User userModel = new User();
+    IEnumerable<Book> books = new List<Book>();
+    bool notAdmin = false;
+    IEnumerable<User> users = new List<User>();
+
+    protected override async Task OnInitializedAsync()
+    {
+        var uri = new Uri(navManager.Uri);
+
+        var queryString = uri.Query;
+
+        if (!string.IsNullOrWhiteSpace(queryString))
+        {
+            Id = int.Parse(queryString.Substring(1));
+            userModel = await userData.GetUser(Id);
+        }
+
+        //books = await bookData.GetBooks();
+        //await JS.InvokeVoidAsync("console.log", books);
+    }
+
+}

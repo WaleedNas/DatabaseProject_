@@ -11,9 +11,14 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Content Update="Pages\CreateAccount.razor">
+    <Content Update="Pages\Store Pages\CreateAccount.razor">
       <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
     </Content>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Pages\AdminPages\Book\" />
+    <Folder Include="Pages\AdminPages\User\" />
   </ItemGroup>
 
 </Project>

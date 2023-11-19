@@ -1,7 +1,7 @@
 ﻿@page "/"
 @inject NavigationManager navManager
-@inject DataAccess.DBAccess.ISqlDataAccess db
 @inject IUserData userData
+@inject IBookData bookData
 @inject IJSRuntime JS
 
 <PageTitle>VBStore</PageTitle>
@@ -60,6 +60,7 @@
     <div class="row">
         @foreach(Book book in books)
             {
+                if (count >= 3) break;
             <div class="col-sm-6 col-md-4 col-lg-3">
                 <div class="box">
                     <a href="">
@@ -85,6 +86,7 @@
                     </a>
                 </div>
             </div>  
+             count += 1;
             }
     
     </div>
@@ -100,7 +102,8 @@
     int Id;
     User userModel = new User();
     IEnumerable<Book> books = new List<Book>();
-
+    Book book = new Book();
+    int count = 0;
 
     protected override async Task OnInitializedAsync()
     {
@@ -115,15 +118,14 @@
             }
             try
             {
-
                 userModel = await userData.GetUser(Id);
+                books = await bookData.GetBooks();
+
             } catch(Exception e)
             {
 
             }
-            await JS.InvokeVoidAsync("console.log", userModel);
-            var bookData = new BookData(db);
-            books = await bookData.GetBooks();
+            await JS.InvokeVoidAsync("console.log", books);
         }catch(Exception e)
         {
             //Armando
