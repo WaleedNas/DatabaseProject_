@@ -5,11 +5,21 @@
 
 <div class="header_section">
     <nav class="navbar navbar-expand-lg custom_nav-container ">
+        @if (userModel.UserType != UserType.Admin)
+                {
         <a class="navbar-brand" href="/">
             <span>
                 VBStore
             </span>
-        </a>
+            </a>
+        } else
+        {
+            <a class="navbar-brand" href="/Admin">
+                <span>
+                    VBStore
+                </span>
+            </a>
+        }
 
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
 
@@ -50,9 +60,12 @@
                             Logout
                         </span>
                     </a>
-                    <a href="">
-                        <i class="fa fa-shopping-bag" aria-hidden="true">Cart</i> @*logo for cart*@
-                    </a>
+                    @if (userModel.UserType != UserType.Admin)
+                    {
+                        <a href="">
+                            <i class="fa fa-shopping-bag" aria-hidden="true">Cart</i> @*logo for cart*@
+                        </a>
+                    }
                 }
                 else
                 {

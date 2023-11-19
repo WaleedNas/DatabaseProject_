@@ -60,7 +60,7 @@
     <div class="row">
         @foreach(Book book in books)
             {
-                if (count >= 3) break;
+                if (count >= 4) break;
             <div class="col-sm-6 col-md-4 col-lg-3">
                 <div class="box">
                     <a href="">
@@ -119,17 +119,20 @@
             try
             {
                 userModel = await userData.GetUser(Id);
+                
             } catch(Exception e)
             {
 
             }
             IEnumerable<Book> booksI = await bookData.GetBooks();
             books = booksI.ToList();
-            //await JS.InvokeVoidAsync("console.log", books);
         }catch(Exception e)
         {
             //Armando
             //RDI16WYN4BT
+
+            //Keith
+            //TTI22BWG2PF
         }
     }
 

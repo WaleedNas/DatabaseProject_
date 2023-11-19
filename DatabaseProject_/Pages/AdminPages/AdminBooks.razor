@@ -1,0 +1,81 @@
+﻿@page "/BookAdmin"
+@inject NavigationManager navManager
+@inject IUserData userData
+@inject IBookData bookData
+@inject IJSRuntime JS
+
+<PageTitle>VBStore</PageTitle>
+@if (notAdmin)
+{
+    <h1>Unauthorized Access</h1>
+} else
+{
+    <h1>Users</h1>
+
+    <p>
+        <a style="margin:10px 0 20px 0" class="btn btn-primary" asp-page="Create">Add User</a>
+        <a style="color:#040404" class="btn btn-link" href="/Location/Index">Books</a>
+    </p>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>
+                    Username
+                </th>
+                <th>
+                    Email
+                </th>
+                <th>
+                    Account Type
+                </th>
+
+
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (User user in users)
+            {
+                <tr>
+                    <td>
+                        @user.Username
+                    </td>
+                    <td>
+                        @user.Email
+                    </td>
+                    <td>
+                        @user.UserType
+                    </td>
+                    <td>
+                        <NavLink class="btn btn-primary" asp-page="User/Edit" asp-route-id="@user.UserId">Edit</NavLink> |
+                        <NavLink class="btn btn-primary" asp-page="User/Details" asp-route-id="@user.UserId">Details</NavLink> |
+                        <NavLink class="btn btn-danger" asp-page="User/Delete" asp-route-id="@user.UserId">Delete</NavLink>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+}
+
+
+@code {
+    int Id;
+    bool notAdmin = false;
+    List<User> users = new List<User>();
+
+    protected override async Task OnInitializedAsync()
+    {
+        var uri = new Uri(navManager.Uri);
+
+        var queryString = uri.Query;
+
+        if (!string.IsNullOrWhiteSpace(queryString))
+        {
+            Id = int.Parse(queryString.Substring(1));
+        }
+
+    }
+
+}
