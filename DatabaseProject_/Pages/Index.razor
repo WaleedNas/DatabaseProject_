@@ -1,7 +1,10 @@
 ﻿@page "/"
+@using System.Drawing
+@using ImageConverter = DatabaseProject_.Util.ImageConverter
 @inject NavigationManager navManager
 @inject DataAccess.DBAccess.ISqlDataAccess db
 @inject IUserData userData
+@inject IBookData bookData
 
 <PageTitle>VBStore</PageTitle>
 
@@ -61,7 +64,10 @@
         <div class="box">
         <a href="">
             <div class="img-box">
-            <img src="images/p1.png" alt="">
+                @if (bookModel.CoverImage != null)
+                {
+                    <img src=@($"data:image/Bmp;base64,{Convert.ToBase64String(bookModel.CoverImage)}") alt="">
+                }
             </div>
             <div class="detail-box">
             <h6>
@@ -95,20 +101,34 @@
 @code {
     int Id;
     User userModel = new User();
+    Book bookModel = new Book();
 
     protected override async Task OnInitializedAsync()
     {
-        var uri = new Uri(navManager.Uri);
+        //var uri = new Uri(navManager.Uri);
 
-        var queryString = uri.Query;
+        //var queryString = uri.Query;
 
-        if (!string.IsNullOrWhiteSpace(queryString))
-        {
-            Id = int.Parse(queryString.Substring(1));
-        }
+        //if (!string.IsNullOrWhiteSpace(queryString))
+        //{
+        //    Id = int.Parse(queryString.Substring(1));
+        //}
 
-        userModel = await userData.GetUser(1);
+        //userModel = await userData.GetUser(1);
 
+        ///////////// Add image to database
+        //await bookData.UpdateBook(new Book()
+        //{
+        //    BookId = 1,
+        //    CoverImage = ImageConverter.ImageToByteArray(Image.FromFile("C:\\Users\\muath\\Pictures\\Picture1.jpg")),
+        //    Description = "Cool",
+        //    Price = 20,
+        //    Title = "Cool",
+        //    QuantityAvailable = 20,
+        //    Publisher = "Cool",
+        //    PublicationDate = DateTime.Now,
+        //});
+        bookModel = await bookData.GetBook(1);
     }
 
 }

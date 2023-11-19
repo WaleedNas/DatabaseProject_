@@ -17,7 +17,7 @@ namespace DataAccess.Data
 
             if (!results.Any())
                 throw new BookNotFoundException("Book not found");
-
+             
             return results.FirstOrDefault();
         }
 
