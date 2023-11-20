@@ -11,10 +11,9 @@
 } else
 {
     <h1>Users</h1>
-
     <p>
         <NavLink style="margin:10px 0 20px 0" class="btn btn-primary" @onclick="HandleCreatePage">Add User</NavLink>
-        <a style="color:#040404" class="btn nav-link" @onclick="HandleBookPage">Books</a>
+        <NavLink style="color:#040404; margin-left:70rem" class="btn btn-link" @onclick="HandleBookPage">Books</NavLink>
     </p>
 
     <table class="table">
@@ -120,7 +119,7 @@
 
     private void HandleBookPage()
     {
-        navManager.NavigateTo("/AdminBooks?" + admin.UserId);
+        navManager.NavigateTo("/BookAdmin?" + admin.UserId);
 
     }
 
