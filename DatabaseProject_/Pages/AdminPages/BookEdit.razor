@@ -134,7 +134,7 @@ else
             
                 try
                 {
-                    var img = await selectedFile.RequestImageFileAsync("image/jpeg", 200, 200);
+                    var img = await selectedFile.RequestImageFileAsync("image/jpeg", 130, 200);
                     byte[] imageBytes = new byte[img.Size];
                     var stream = img.OpenReadStream(int.MaxValue);
                     await stream.ReadAsync(imageBytes);
