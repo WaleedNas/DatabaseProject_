@@ -7,13 +7,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Content Remove="Pages\AdminPages\BookCreate.razor" />
-    <Content Remove="Pages\AdminPages\BookDelete.razor" />
-    <Content Remove="Pages\AdminPages\BookDetails.razor" />
-    <Content Remove="Pages\AdminPages\BookEdit.razor" />
-  </ItemGroup>
-
-  <ItemGroup>
     <PackageReference Include="System.Drawing.Common" Version="8.0.0" />
   </ItemGroup>
 
@@ -28,13 +21,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Include="Pages\AdminPages\BookCreate.razor" />
-    <None Include="Pages\AdminPages\BookDelete.razor" />
-    <None Include="Pages\AdminPages\UserDelete.razor" />
-    <None Include="Pages\AdminPages\BookDetails.razor" />
     <None Include="Pages\AdminPages\UserDetails.razor" />
     <None Include="Pages\AdminPages\UserCreate.razor" />
-    <None Include="Pages\AdminPages\BookEdit.razor" />
     <None Include="Pages\AdminPages\UserEdit.razor" />
   </ItemGroup>
 
