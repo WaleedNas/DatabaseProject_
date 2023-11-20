@@ -3,6 +3,7 @@
 @inject NavigationManager navManager
 @inject IUserData userData
 @inject IBookData bookData
+@inject IOrderData orderData
 @inject IJSRuntime JS
 
 <PageTitle>Shop</PageTitle>
@@ -70,6 +71,10 @@
     {
         if(!IsLoggedIn)
             navManager.NavigateTo("/login");
+        else
+        {
+            
+        }
     }
 
 }
