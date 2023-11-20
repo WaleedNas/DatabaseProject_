@@ -1,0 +1,75 @@
+﻿@page "/view/{BookId:int}"
+@using DatabaseProject_.Util
+@inject NavigationManager navManager
+@inject IUserData userData
+@inject IBookData bookData
+@inject IJSRuntime JS
+
+<PageTitle>Shop</PageTitle>
+
+<section class="shop_section layout_padding">
+    <div class="container">
+        @if (Book != null)
+        {
+            <div class="box">
+                <div style="width: 50%; display: inline;">
+                    <div class="heading_container heading_center">
+                        <h2>
+                            @Book.Title
+                        </h2>
+                    </div>
+                    <p>@Book.Description</p>
+                    <p>@Book.PublicationDate</p>
+                    <p>@Book.Publisher</p>
+                    <p>AED @Book.Price</p>
+                </div>
+                <div class="img-box">
+                    <img src=@ImageConverter.BytesToSrc(Book.CoverImage) alt="Book Cover">
+                </div>
+            </div>
+        }
+        <div class="btn-box">
+            <a style="cursor: pointer;" onclick="@HandleAdd">
+                Add To Cart
+            </a>
+        </div>
+    </div>
+</section>
+
+@code {
+
+    [Parameter]
+    public int BookId { get; set; }
+
+    public Book Book { get; set; }
+
+    private bool IsLoggedIn { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+            Book = await bookData.GetBook(BookId);
+
+            var uri = new Uri(navManager.Uri);
+
+            var queryString = uri.Query;
+
+            if (!string.IsNullOrWhiteSpace(queryString) && queryString.Substring(1) != "0")
+            {
+                IsLoggedIn = true;
+            }
+
+        }
+        catch (Exception e)
+        {
+        }
+    }
+
+    private void HandleAdd()
+    {
+        if(!IsLoggedIn)
+            navManager.NavigateTo("/login");
+    }
+
+}
