@@ -2,6 +2,7 @@
 @inject NavigationManager navManager
 @inject IUserData userData
 @inject IBookData bookData
+@inject IOrderData orderData
 @inject IJSRuntime JS
 
 <PageTitle>VBStore</PageTitle>
@@ -103,7 +104,11 @@
     }
     private async Task HandleDelete(int id)
     {
-
+        var orders = await orderData.GetOrdersByUser(id);
+        foreach (Order order in orders)
+		{
+			await orderData.DeleteOrder(order.OrderId);
+		}
         var response = await userData.DeleteUser(id);
 
         users = users.Where(user => user.UserId != id).ToList();

@@ -25,7 +25,7 @@
                     Title
                 </th>
                 <th>
-                    Price
+                    Price (AED)
                 </th>
                 <th>
                     Publishers
@@ -102,13 +102,20 @@
     private async Task HandleDelete(int id)
     {
 
-        
-        var response = await bookData.DeleteBook(id);
+        try
+        {
+    var response = await bookData.DeleteBook(id);
 
         books = books.Where(book => book.BookId != id).ToList();
 
         // Manually trigger component render
         StateHasChanged();
+            
+        }
+        catch (Exception e)
+        {
+            await JS.InvokeVoidAsync("alert", "Cannot delete Book / Author as it is included in a current existing Order");
+        }
 
 
     }

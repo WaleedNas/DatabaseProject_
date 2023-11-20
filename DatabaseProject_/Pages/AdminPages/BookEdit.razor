@@ -35,7 +35,7 @@ else
                 <div class="group-right">
 
                     <div class="form-group">
-                        <label>Price</label>
+                        <label>Price (AED)</label>
                         <InputNumber TValue="decimal" @bind-Value="@bookModel.Price" id="price" name="price" required />
                     </div>
                     <div class="form-group">
@@ -48,7 +48,7 @@ else
                     </div>
                 </div>
                 <div class="form-group">
-                    <input style="margin:10px 0 10px 0" type="submit" value="Edit" class="btn btn-primary" />
+                    <input style="margin:10px 0 10px 0" type="submit" @onclick="HandleSubmit" value="Edit" class="btn btn-primary" />
                 </div>
             </EditForm>
         </div>
@@ -116,7 +116,7 @@ else
             message = "Book Update Error";
         }
 
-        navManager.NavigateTo("/AdminBooks");
+        navManager.NavigateTo("/BookAdmin?" + admin.UserId);
 
     }
 

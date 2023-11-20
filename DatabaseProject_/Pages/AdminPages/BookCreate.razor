@@ -30,7 +30,7 @@
             <div class="group-right">
 
                 <div class="form-group">
-                    <label >Price</label>
+                    <label >Price (AED)</label>
                     <InputNumber TValue="decimal" @bind-Value="@bookModel.Price" id="price" name="price" required />
                 </div>
                 <div class="form-group">
@@ -61,7 +61,7 @@
 <div>
     <a class="btn btn-primary" href="javascript: history.go(-1)">Back to List</a>
 </div>
-    @code {
+@code {
     Book bookModel = new Book();
     List<Author> authors = new List<Author>();
     User admin = new User();
@@ -101,15 +101,16 @@
     {
         try
         {
-            var response = await bookData.InsertBook(bookModel);
 
+            var response = await bookData.InsertBook(bookModel);
+            var bookAuthor = await bookData.InsertBookAuthor(response, authorId);
         }
         catch (Exception e)
         {
             message = "Book Already Exists";
         }
 
-        navManager.NavigateTo("/AdminBooks?" + admin.UserId);
+        navManager.NavigateTo("/BookAdmin?" + admin.UserId);
 
     }
 

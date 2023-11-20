@@ -3,6 +3,7 @@
 @inject IUserData userData
 @inject IBookData bookData
 @inject IAuthorData authorData
+@inject IOrderData orderData
 @inject IJSRuntime JS
 
 <PageTitle>VBStore</PageTitle>
@@ -99,22 +100,29 @@ else
 
     private void HandleEdit(int id)
     {
-        navManager.NavigateTo("/BookEdit?" + admin.UserId + "+" + id);
+        navManager.NavigateTo("/AuthorEdit?" + admin.UserId + "+" + id);
     }
     private async Task HandleDelete(int id)
     {
 
-        var _Books = await bookData.GetBooksByAuthor(id);
-        foreach (var book in _Books)
+        try
         {
-            await bookData.DeleteBook(book.BookId); 
+            var _Books = await bookData.GetBooksByAuthor(id);
+            foreach (var book in _Books)
+            {
+                await bookData.DeleteBook(book.BookId); 
+            }
+            var response = await authorData.DeleteAuthor(id);
+
+            authors = authors.Where(author => author.AuthorId != id).ToList();
+
+            // Manually trigger component render
+            StateHasChanged();
+
+        } catch (Exception e)
+        {
+            await JS.InvokeVoidAsync("alert", "Cannot delete Book / Author as it is included in a current existing Order");
         }
-        var response = await authorData.DeleteAuthor(id);
-
-        authors = authors.Where(author => author.AuthorId != id).ToList();
-
-        // Manually trigger component render
-        StateHasChanged();
 
 
     }

@@ -34,7 +34,7 @@ else
 
                 </div>
                 <div class="form-group">
-                    <input style="margin:10px 0 10px 0" type="submit" value="Edit" class="btn btn-primary" />
+                    <input style="margin:10px 0 10px 0" type="submit" @onclick="HandleSubmit" value="Edit" class="btn btn-primary" />
                 </div>
             </EditForm>
         </div>
@@ -102,7 +102,7 @@ else
             message = "Author Update Error";
         }
 
-        navManager.NavigateTo("/AdminAuthor");
+        navManager.NavigateTo("/AdminAuthor?" + admin.UserId);
 
     }
 
