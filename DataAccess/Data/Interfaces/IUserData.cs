@@ -8,4 +8,6 @@ public interface IUserData
     Task<int> InsertUser(User user);
     Task<int> UpdateUser(User user);
 
+    Task<int> DeleteUser(int userId);
+
 }

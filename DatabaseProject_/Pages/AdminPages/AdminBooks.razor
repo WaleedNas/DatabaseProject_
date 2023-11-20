@@ -21,13 +21,13 @@
         <thead>
             <tr>
                 <th>
-                    Username
+                    Title
                 </th>
                 <th>
-                    Email
+                    Price
                 </th>
                 <th>
-                    Account Type
+                    Publishers
                 </th>
 
 
@@ -35,22 +35,22 @@
             </tr>
         </thead>
         <tbody>
-            @foreach (User user in users)
+            @foreach (Book book in books)
             {
                 <tr>
                     <td>
-                        @user.Username
+                        @book.Title
                     </td>
                     <td>
-                        @user.Email
+                        @book.Price
                     </td>
                     <td>
-                        @user.UserType
+                        @book.Publisher
                     </td>
                     <td>
-                        <NavLink class="btn btn-primary" asp-page="User/Edit" asp-route-id="@user.UserId">Edit</NavLink> |
-                        <NavLink class="btn btn-primary" asp-page="User/Details" asp-route-id="@user.UserId">Details</NavLink> |
-                        <NavLink class="btn btn-danger" asp-page="User/Delete" asp-route-id="@user.UserId">Delete</NavLink>
+                        <NavLink class="btn btn-primary" @onclick="() => HandleEdit(book.BookId)">Edit</NavLink> |
+                        <NavLink class="btn btn-primary" @onclick="() => HandleDetails(book.BookId)">Details</NavLink> |
+                        <NavLink class="btn btn-danger" @onclick="() => HandleDelete(book.BookId)">Delete</NavLink>
                     </td>
                 </tr>
             }
@@ -63,7 +63,7 @@
 @code {
     int Id;
     bool notAdmin = false;
-    List<User> users = new List<User>();
+    List<Book> books = new List<Book>();
 
     protected override async Task OnInitializedAsync()
     {
@@ -71,11 +71,36 @@
 
         var queryString = uri.Query;
 
-        if (!string.IsNullOrWhiteSpace(queryString))
-        {
-            Id = int.Parse(queryString.Substring(1));
-        }
+        //if (!string.IsNullOrWhiteSpace(queryString))
+        //{
+        //    Id = int.Parse(queryString.Substring(1));
+        //}
 
+        IEnumerable<Book> booksI = await bookData.GetBooks();
+        books = booksI.ToList();
+
+
+    }
+
+    private void HandleEdit(int id)
+    {
+        navManager.NavigateTo("/BookEdit?" + id);
+    }
+    private async Task HandleDelete(int id)
+    {
+
+        var response = await bookData.DeleteBook(id);
+       
+        books = books.Where(book => book.BookId != id).ToList();
+
+        // Manually trigger component render
+        StateHasChanged();
+
+        
+    }
+    private void HandleDetails(int id)
+    {
+        navManager.NavigateTo("/BookDetails?" + id);
     }
 
 }

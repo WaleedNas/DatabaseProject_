@@ -48,9 +48,9 @@
                         @user.UserType
                     </td>
                     <td>
-                        <NavLink class="btn btn-primary" asp-page="User/Edit" asp-route-id="@user.UserId">Edit</NavLink> |
-                        <NavLink class="btn btn-primary" asp-page="User/Details" asp-route-id="@user.UserId">Details</NavLink> |
-                        <NavLink class="btn btn-danger" asp-page="User/Delete" asp-route-id="@user.UserId">Delete</NavLink>
+                        <NavLink class="btn btn-primary" @onclick="() => HandleEdit(user.UserId)">Edit</NavLink> |
+                        <NavLink class="btn btn-primary" @onclick="() => HandleDetails(user.UserId)">Details</NavLink> |
+                        <NavLink class="btn btn-danger" @onclick="() => HandleDelete(user.UserId)">Delete</NavLink>
                     </td>
                 </tr>
             }
@@ -76,6 +76,28 @@
             Id = int.Parse(queryString.Substring(1));
         }
 
+    }
+
+    private void HandleEdit(int id)
+    {
+        navManager.NavigateTo("/UserEdit?" + id);
+    }
+    private async Task HandleDelete(int id)
+    {
+
+        var response = await userData.DeleteUser(id);
+
+        users = users.Where(user => user.UserId != id).ToList();
+
+        // Manually trigger component render
+        StateHasChanged();
+
+
+    }
+    private void HandleDetails(int id)
+    {
+
+        navManager.NavigateTo("/UserDetails?" + id);
     }
 
 }
