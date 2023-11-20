@@ -11,7 +11,15 @@
 <PageTitle>Cart</PageTitle>
 
 <section class="shop_section layout_padding">
+    
     <div class="container">
+        
+        <div class="heading_container heading_center">
+            <h2>
+                Cart
+            </h2>
+        </div>
+
         @if (!HasCart)
         {
             <h2>You have nothing in the cart</h2>
@@ -20,24 +28,37 @@
         {
             @for (var i = 0; i < Books.Count; i++)
             {
-                <div class="box">
-                    <div style="width: 50%;">
+                <div class="box" style="display: flex;">
+                    <div style="width: 50%; flex: 1;">
                         <h2>
                             @Books[i].Title
                         </h2>
-                        <p>@Books[i].Description</p>
                         <p>@Books[i].PublicationDate</p>
                         <p>@Books[i].Publisher</p>
                         <p>AED @Books[i].Price</p>
                     </div>
-                    <div class="img-box">
-                        <img src=@ImageConverter.BytesToSrc(Books[i].CoverImage) alt="Book Cover">
+                    <div class="img-box" style="flex: 1;">
+                        <img src=@ImageConverter.BytesToSrc(Books[i].CoverImage) alt="Book Cover" style="">
                     </div>
                 </div>
             }
-        }
 
+            <div class="heading_center">
+                Total Price: AED @(Books.Sum(b => b.Price))
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="btn-box">
+                        <a @onclick="@HandleCheckout" class="btn1">
+                            <span class="btn1_text">Checkout</span>
+                            <span class="btn1_icon"><i class="fa fa-angle-right"></i></span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        }
     </div>
+
 </section>
 
 @code {
@@ -83,7 +104,17 @@
             HasCart = false;
             return;
         }
-        
+
+    }
+
+    private async Task HandleCheckout()
+    {
+        CartOrder.Status = OrderStatus.Completed;
+        CartOrder.OrderDate = DateTime.Now;
+        await orderData.UpdateOrder(CartOrder);
+
+        //refresh page
+        navManager.NavigateTo("/cart/" + UserId, true);
     }
 
 }
