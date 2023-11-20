@@ -1,59 +1,111 @@
 ﻿@page "/BookDetails"
 @inject NavigationManager navManager
 @inject IUserData userData
+@inject IBookData bookData
 @inject IJSRuntime JS
+
+
+@if (notAdmin)
+{
+    <h1> Unauthorized Access </h1>
+}
+else
+{
 
 <h1>Book Details</h1>
 
-<div style="margin-bottom:20px">
-    <hr />
-    <dl class="row">
-        <dt class="col-sm-2">
-            Username
-        </dt>
-        <dd class="col-sm-10">
-            @userModel.Username
-        </dd>
-        <dt class="col-sm-2">
-            First Name
-        </dt>
-        <dd class="col-sm-10">
-            @userModel.FirstName
-        </dd>
-        <dt class="col-sm-2">
-            Last Name
-        </dt>
-        <dd class="col-sm-10">
-            @userModel.LastName
-        </dd>
-        <dt class="col-sm-2">
-            Email
-        </dt>
-        <dd class="col-sm-10">
-            @userModel.Email
-        </dd>
-        <dt class="col-sm-2">
-            Password
-        </dt>
-        <dd class="col-sm-10">
-            @userModel.PasswordHash
-        </dd>
-        <dt class="col-sm-2">
-            Type
-        </dt>
-        <dd class="col-sm-10">
-            @userModel.UserType
-        </dd>
-    </dl>
-</div>
-<div>
-    <a class="btn btn-primary" href="/UserEdit">Edit</a> |
-    <input class="btn btn-primary" type="button" value="Print" onclick="window.print();" /> |
-    <a class="btn btn-primary" href="javascript: history.go(-1)">Back to List</a>
-</div>
+    <div style="margin-bottom:20px">
+        <hr />
+        <dl class="row">
+            <dt class="col-sm-2">
+                Title
+            </dt>
+            <dd class="col-sm-10">
+                @bookModel.Title
+            </dd>
+            <dt class="col-sm-2">
+                Description
+            </dt>
+            <dd class="col-sm-10">
+                @bookModel.Description
+            </dd>
+            <dt class="col-sm-2">
+                Publication Date
+            </dt>
+            <dd class="col-sm-10">
+                @bookModel.PublicationDate
+            </dd>
+            <dt class="col-sm-2">
+                Price
+            </dt>
+            <dd class="col-sm-10">
+                @bookModel.Price
+            </dd>
+            <dt class="col-sm-2">
+                Quantity
+            </dt>
+            <dd class="col-sm-10">
+                @bookModel.QuantityAvailable
+            </dd>
+            <dt class="col-sm-2">
+                Publisher
+            </dt>
+            <dd class="col-sm-10">
+                @bookModel.Publisher
+            </dd>
+        </dl>
+    </div>
+    <div>
+        <a class="btn btn-primary" href="/UserEdit">Edit</a> |
+        <input class="btn btn-primary" type="button" value="Print" onclick="window.print();" /> |
+        <a class="btn btn-primary" href="javascript: history.go(-1)">Back to List</a>
+    </div>
+}
 
 @code {
     // get user id from url
-    User userModel = new User();
+    Book bookModel = new Book();
+
+    int Id;
+    int adminId;
+    bool notAdmin = false;
+    User admin = new User();
+
+    protected override async Task OnInitializedAsync()
+    {
+        var uri = new Uri(navManager.Uri);
+
+        var queryString = uri.Query;
+
+        if (!string.IsNullOrWhiteSpace(queryString))
+        {
+            // Remove the "?" at the beginning
+            queryString = queryString.Substring(1);
+
+            // Split the remaining string using "+"
+            var parts = queryString.Split('+');
+
+            if (parts.Length == 2)
+            {
+                adminId = int.Parse(parts[0]);
+                Id = int.Parse(parts[1]);
+
+            }
+        }
+
+        try
+        {
+            admin = await userData.GetUser(adminId);
+            bookModel = await bookData.GetBook(Id);
+        }
+        catch (Exception e)
+        { }
+
+        if (admin.UserType != UserType.Admin)
+        {
+            notAdmin = true;
+        }
+
+    }
 
 }

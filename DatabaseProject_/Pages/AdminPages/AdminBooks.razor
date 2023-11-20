@@ -102,7 +102,7 @@
     private async Task HandleDelete(int id)
     {
 
-        var response = await userData.DeleteUser(id);
+        var response = await bookData.DeleteBook(id);
 
         books = books.Where(book => book.BookId != id).ToList();
 
