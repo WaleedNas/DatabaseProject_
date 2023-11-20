@@ -40,6 +40,19 @@ namespace DataAccess.Data
 
         public async Task<int> InsertOrderItem(OrderItem order)
         {
+            // If item exists in cart, increase quantity
+            try
+            {
+                var item = await GetOrderItem(order.OrderId, order.BookId);
+                item.Quantity += order.Quantity;
+
+                return await UpdateOrderItem(item);
+            }
+            catch (OrderItemNotFoundException e)
+            {
+            }
+
+            // Otherwise, add one
             return await _db.SaveData("dbo.spOrderItem_Insert", order); // returns new book id
         }
 

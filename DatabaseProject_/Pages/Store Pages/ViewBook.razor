@@ -4,6 +4,7 @@
 @inject IUserData userData
 @inject IBookData bookData
 @inject IOrderData orderData
+@inject IOrderItemData orderItemData
 @inject IJSRuntime JS
 
 <PageTitle>Shop</PageTitle>
@@ -42,6 +43,8 @@
     [Parameter]
     public int BookId { get; set; }
 
+    public int UserId { get; set; }
+
     public Book Book { get; set; }
 
     private bool IsLoggedIn { get; set; }
@@ -56,9 +59,11 @@
 
             var queryString = uri.Query;
 
-            if (!string.IsNullOrWhiteSpace(queryString) && queryString.Substring(1) != "0")
+            if (!string.IsNullOrWhiteSpace(queryString) &&
+                int.TryParse(queryString[1..], out var id) && id != 0)
             {
                 IsLoggedIn = true;
+                UserId = id;
             }
 
         }
@@ -67,13 +72,49 @@
         }
     }
 
-    private void HandleAdd()
+    private async void HandleAdd()
     {
         if(!IsLoggedIn)
             navManager.NavigateTo("/login");
         else
         {
-            
+            var orders = new List<Order>();
+            try
+            {
+                orders = (await orderData.GetOrdersByUser(UserId)).ToList();
+
+                if (orders.All(o => o.Status != OrderStatus.Pending))
+                    throw new OrderData.OrderNotFoundException();
+            }
+            catch (OrderData.OrderNotFoundException e)
+            {
+                var order = new Order()
+                {
+                    OrderDate = DateTime.Now,
+                    Status = OrderStatus.Pending,
+                    TotalPrice = Book.Price,
+                    UserId = UserId
+                };
+
+                order.OrderId = await orderData.InsertOrder(order);
+
+                orders.Add(order);
+            }
+
+            foreach (var order in orders)
+            {
+                // The order wasn't bought yet (i.e it is a cart)
+                if (order.Status != OrderStatus.Pending) continue;
+
+                await orderItemData.InsertOrderItem(new OrderItem()
+                {
+                    BookId = BookId,
+                    OrderId = order.OrderId,
+                    Quantity = 1
+                });
+
+                break;
+            }
         }
     }
 
