@@ -1,5 +1,96 @@
-﻿<h3>AuthorCreate</h3>
+﻿@page "/AuthorCreate"
+@inject NavigationManager navManager
+@inject IUserData userData
+@inject IBookData bookData
+@inject IAuthorData authorData
+@inject IJSRuntime JS
+
+
+@if (notAdmin)
+{
+    <h1>Unauthorized Access</h1>
+}
+else
+{
+    <h1>Edit Author</h1>
+    <hr />
+    <div class="row">
+        <div class="col-md-4">
+            <EditForm Model="authorModel" method="post">
+                <div class="group-left">
+                    <div class="form-group">
+                        <label>First Name</label>
+                        <InputText @bind-Value="@authorModel.FirstName" type="text" id="title" name="title" required />
+                    </div>
+                    <div class="form-group">
+                        <label>Last Name</label>
+                        <InputText @bind-Value="@authorModel.LastName" id="price" name="price" required />
+                    </div>
+                    <div class="form-group">
+                        <label>Description</label>
+                        <InputText @bind-Value="@authorModel.Description" type="text" id="desc" name="desc" required />
+                    </div>
+
+
+                </div>
+                <div class="form-group">
+                    <input style="margin:10px 0 10px 0" type="submit" value="Create" class="btn btn-primary" />
+                </div>
+            </EditForm>
+        </div>
+    </div>
+
+    <div>
+        <a class="btn btn-primary" href="javascript: history.go(-1)">Back to List</a>
+    </div>
+}
 
 @code {
+    Author authorModel = new Author();
+    User admin = new User();
+    string message = "";
+    int Id;
+    bool notAdmin = false;
+
+    protected async override Task OnInitializedAsync()
+    {
+        var uri = new Uri(navManager.Uri);
+
+        var queryString = uri.Query;
+
+        if (!string.IsNullOrWhiteSpace(queryString))
+        {
+            Id = int.Parse(queryString.Substring(1));
+        }
+
+        try
+        {
+            admin = await userData.GetUser(Id);
+        }
+        catch (Exception e)
+        { }
+
+        if (admin.UserType != UserType.Admin)
+        {
+            notAdmin = true;
+        }
+    }
+
+
+    private async Task HandleSubmit()
+    {
+        try
+        {
+            var response = await authorData.InsertAuthor(authorModel);
+
+        }
+        catch (Exception e)
+        {
+            message = "Author Already Exists";
+        }
+
+        navManager.NavigateTo("/AdminAuthor?" + admin.UserId);
+
+    }
 
 }

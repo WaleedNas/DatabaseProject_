@@ -67,7 +67,7 @@ else
         </dl>
     </div>
     <div>
-        <a class="btn btn-primary" href="/BookEdit">Edit</a> |
+        <a class="btn btn-primary" @onclick="HandleEdit">Edit</a> |
         <input class="btn btn-primary" type="button" value="Print" onclick="window.print();" /> |
         <a class="btn btn-primary" href="javascript: history.go(-1)">Back to List</a>
     </div>
@@ -119,6 +119,11 @@ else
             notAdmin = true;
         }
 
+    }
+
+    private void HandleEdit()
+    {
+        navManager.NavigateTo("/BookEdit?" + admin.UserId + "+" + bookModel.BookId);
     }
 
 }
