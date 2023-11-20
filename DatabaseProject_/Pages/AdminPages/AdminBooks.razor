@@ -13,8 +13,9 @@
     <h1>Users</h1>
 
     <p>
-        <a style="margin:10px 0 20px 0" class="btn btn-primary" asp-page="Create">Add User</a>
-        <a style="color:#040404" class="btn btn-link" href="/Location/Index">Books</a>
+        <NavLink style="margin:10px 0 20px 0" class="btn btn-primary" @onclick="HandleCreatePage">Add User</NavLink>
+        <NavLink style="color:#040404; margin-left:70rem" class="btn btn-link" @onclick="HandleAdminPage">Users</NavLink>
+        <NavLink style="color:#040404;" class="btn btn-link" @onclick="HandleAuthorPage">Authors</NavLink>
     </p>
 
     <table class="table">
@@ -61,9 +62,11 @@
 
 
 @code {
+
     int Id;
     bool notAdmin = false;
     List<Book> books = new List<Book>();
+    User admin = new User();
 
     protected override async Task OnInitializedAsync()
     {
@@ -71,14 +74,22 @@
 
         var queryString = uri.Query;
 
-        //if (!string.IsNullOrWhiteSpace(queryString))
-        //{
-        //    Id = int.Parse(queryString.Substring(1));
-        //}
+        if (!string.IsNullOrWhiteSpace(queryString))
+        {
+            Id = int.Parse(queryString.Substring(1));
+        }
 
-        IEnumerable<Book> booksI = await bookData.GetBooks();
-        books = booksI.ToList();
+        try
+        {
+            admin = await userData.GetUser(Id);
+        }
+        catch (Exception e)
+        { }
 
+        if (admin.UserType != UserType.Admin)
+        {
+            notAdmin = true;
+        }
 
     }
 
@@ -89,18 +100,35 @@
     private async Task HandleDelete(int id)
     {
 
-        var response = await bookData.DeleteBook(id);
-       
+        var response = await userData.DeleteUser(id);
+
         books = books.Where(book => book.BookId != id).ToList();
 
         // Manually trigger component render
         StateHasChanged();
 
-        
+
     }
     private void HandleDetails(int id)
     {
-        navManager.NavigateTo("/BookDetails?" + id);
+
+        navManager.NavigateTo("/BookDetails?" + admin.UserId + "+" + id);
     }
 
+    private void HandleCreatePage()
+    {
+        navManager.NavigateTo("/BookCreate?" + admin.UserId);
+
+    }
+
+    private void HandleAdminPage()
+    {
+        navManager.NavigateTo("/Admin?" + admin.UserId);
+
+    }
+    private void HandleAuthorPage()
+    {
+        navManager.NavigateTo("/AdminAuthor?" + admin.UserId);
+
+    }
 }

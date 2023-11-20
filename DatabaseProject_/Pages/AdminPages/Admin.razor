@@ -13,8 +13,8 @@
     <h1>Users</h1>
 
     <p>
-        <a style="margin:10px 0 20px 0" class="btn btn-primary" href="/UserCreate">Add User</a>
-        <a style="color:#040404" class="btn btn-link" href="/Location/Index">Books</a>
+        <NavLink style="margin:10px 0 20px 0" class="btn btn-primary" @onclick="HandleCreatePage">Add User</NavLink>
+        <a style="color:#040404" class="btn nav-link" @onclick="HandleBookPage">Books</a>
     </p>
 
     <table class="table">
@@ -64,6 +64,7 @@
     int Id;
     bool notAdmin = false;
     List<User> users = new List<User>();
+    User admin = new User();
 
     protected override async Task OnInitializedAsync()
     {
@@ -75,6 +76,17 @@
         {
             Id = int.Parse(queryString.Substring(1));
         }
+
+        try
+        {
+            admin = await userData.GetUser(Id);   
+        }catch(Exception e)
+        {}
+
+        if (admin.UserType != UserType.Admin)
+		{
+			notAdmin = true;
+		}
 
     }
 
@@ -97,7 +109,19 @@
     private void HandleDetails(int id)
     {
 
-        navManager.NavigateTo("/UserDetails?" + id);
+        navManager.NavigateTo("/UserDetails?" + admin.UserId + "+" + id);
+    }
+
+    private void HandleCreatePage()
+    {
+        navManager.NavigateTo("/UserCreate?" + admin.UserId);
+
+    }
+
+    private void HandleBookPage()
+    {
+        navManager.NavigateTo("/AdminBooks?" + admin.UserId);
+
     }
 
 }

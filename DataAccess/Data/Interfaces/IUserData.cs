@@ -7,7 +7,6 @@ public interface IUserData
     Task<User?> GetUserByLogin(string username, string password);
     Task<int> InsertUser(User user);
     Task<int> UpdateUser(User user);
-
     Task<int> DeleteUser(int userId);
 
 }

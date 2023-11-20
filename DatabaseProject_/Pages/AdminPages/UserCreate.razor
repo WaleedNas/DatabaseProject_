@@ -5,6 +5,12 @@
 
 <h1>Add User</h1>
 
+@if (notAdmin)
+{
+    <h1>Unauthorized Access</h1>   
+} else
+{
+
 <hr />
 <div class="row">
     <div class="col-md-4">
@@ -53,10 +59,40 @@
     <a class="btn btn-primary" href="javascript: history.go(-1)">Back to List</a>
     <h3> @message </h3>
 </div>
+}
 @code {
     User userModel = new User();
+    User admin = new User();
     UserType type;
     string message = "";
+    int Id;
+    bool notAdmin = false;
+
+    protected async override Task OnInitializedAsync()
+    {
+        var uri = new Uri(navManager.Uri);
+
+        var queryString = uri.Query;
+
+        if (!string.IsNullOrWhiteSpace(queryString))
+        {
+            Id = int.Parse(queryString.Substring(1));
+        }
+
+        try
+        {
+            admin = await userData.GetUser(Id);
+        }
+        catch (Exception e)
+        { }
+
+        if (admin.UserType != UserType.Admin)
+        {
+            notAdmin = true;
+        }
+    }
+
+
     private async Task HandleSubmit()
     {
         userModel.UserType = type;

@@ -3,6 +3,12 @@
 @inject IUserData userData
 @inject IJSRuntime JS
 
+@if (notAdmin)
+{
+    <h1> Unauthorized Access </h1>
+} else
+{
+
 <h1>User Details</h1>
 
 <div style="margin-bottom:20px">
@@ -42,7 +48,7 @@
             Type
         </dt>
         <dd class="col-sm-10">
-            @userModel.UserType
+            @userModel.UserType.ToString()
         </dd>
     </dl>
 </div>
@@ -51,9 +57,53 @@
     <input class="btn btn-primary" type="button" value="Print" onclick="window.print();" /> |
     <a class="btn btn-primary" href="javascript: history.go(-1)">Back to List</a>
 </div>
+}
 
 @code {
     // get user id from url
     User userModel = new User();
+
+    int Id;
+    int adminId;
+    bool notAdmin = false;
+    List<User> users = new List<User>();
+    User admin = new User();
+
+    protected override async Task OnInitializedAsync()
+    {
+        var uri = new Uri(navManager.Uri);
+
+        var queryString = uri.Query;
+
+        if (!string.IsNullOrWhiteSpace(queryString))
+        {
+            // Remove the "?" at the beginning
+            queryString = queryString.Substring(1);
+
+            // Split the remaining string using "+"
+            var parts = queryString.Split('+');
+
+            if (parts.Length == 2)
+            {
+                adminId = int.Parse(parts[0]);
+                Id = int.Parse(parts[1]);
+
+            }
+        }
+
+        try
+        {
+            admin = await userData.GetUser(adminId);
+            userModel = await userData.GetUser(Id);
+        }
+        catch (Exception e)
+        { }
+
+        if (admin.UserType != UserType.Admin)
+        {
+            notAdmin = true;
+        }
+
+    }
 
 }
