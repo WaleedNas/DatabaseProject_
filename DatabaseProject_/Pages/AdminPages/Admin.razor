@@ -37,6 +37,10 @@
         <tbody>
             @foreach (User user in users)
             {
+                if (user.UserId == admin.UserId)
+				{
+					continue;
+				}
                 <tr>
                     <td>
                         @user.Username
@@ -80,6 +84,8 @@
         try
         {
             admin = await userData.GetUser(Id);   
+            
+
         }catch(Exception e)
         {}
 
@@ -87,7 +93,8 @@
 		{
 			notAdmin = true;
 		}
-
+        IEnumerable<User> tempUsers = await userData.GetUsers();
+        users = tempUsers.ToList();
     }
 
     private void HandleEdit(int id)

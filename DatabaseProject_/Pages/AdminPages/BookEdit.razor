@@ -19,15 +19,15 @@ else
                 <div class="group-left">
                     <div class="form-group">
                         <label>Title</label>
-                        <InputText @bind-value="@bookModel.Title" type="text" id="title" name="title" required />
+                        <InputText @bind-Value="@bookModel.Title" type="text" id="title" name="title" required />
                     </div>
                     <div class="form-group">
                         <label>Description</label>
-                        <InputText @bind-value="@bookModel.Description" type="text" id="desc" name="desc" required />
+                        <InputText @bind-Value="@bookModel.Description" type="text" id="desc" name="desc" required />
                     </div>
                     <div class="form-group">
                         <label>Publication Date</label>
-                        <InputDate TValue="DateTime?" @bind-value="@bookModel.PublicationDate" id="date" name="date" required />
+                        <InputDate TValue="DateTime?" @bind-Value="@bookModel.PublicationDate" id="date" name="date" required />
                     </div>
 
 
@@ -36,19 +36,19 @@ else
 
                     <div class="form-group">
                         <label>Price</label>
-                        <InputNumber TValue="decimal" @bind-value="@bookModel.Price" id="price" name="price" required />
+                        <InputNumber TValue="decimal" @bind-Value="@bookModel.Price" id="price" name="price" required />
                     </div>
                     <div class="form-group">
                         <label>Publisher</label>
-                        <InputText @bind-value="@bookModel.Publisher" typeof="text" id="pub" name="pub" required />
+                        <InputText @bind-Value="@bookModel.Publisher" typeof="text" id="pub" name="pub" required />
                     </div>
                     <div class="form-group">
                         <label>Quantity Available</label>
-                        <InputNumber TValue="int" @bind-value="@bookModel.QuantityAvailable" id="q" name="q" required />
+                        <InputNumber TValue="int" @bind-Value="@bookModel.QuantityAvailable" id="q" name="q" required />
                     </div>
                 </div>
                 <div class="form-group">
-                    <input style="margin:10px 0 10px 0" type="submit" value="Create" class="btn btn-primary" />
+                    <input style="margin:10px 0 10px 0" type="submit" value="Edit" class="btn btn-primary" />
                 </div>
             </EditForm>
         </div>

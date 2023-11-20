@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using DataAccess.Data.Interfaces;
+using static DataAccess.Data.UserData;
 
 namespace DataAccess.Data;
 public class AuthorData : DataContext, IAuthorData
@@ -44,6 +45,16 @@ public class AuthorData : DataContext, IAuthorData
         var results = await _db.LoadData<Author, dynamic>("dbo.spAuthor_GetByBook", new { BookId = bookId });
         if (!results.Any())
             throw new AuthorNotFoundException("Author not found");
+        return results;
+    }
+
+    public async Task<IEnumerable<Author>> GetAuthors()
+    {
+        var results = await _db.LoadData<Author, dynamic>("dbo.spAuthor_GetAll", new { });
+
+        if (!results.Any())
+            throw new AuthorNotFoundException("Author not found");
+
         return results;
     }
 

@@ -15,5 +15,7 @@ namespace DataAccess.Data.Interfaces
         Task<int> InsertAuthor(Author author);
         Task<int> UpdateAuthor(Author author);
         Task<int> DeleteAuthor(int authorId);
+        Task<IEnumerable<Author>> GetAuthors();
+
     }
 }

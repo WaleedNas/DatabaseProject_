@@ -8,6 +8,7 @@ using Microsoft.VisualBasic;
 using DataAccess.Data.Interfaces;
 using DataAccess.DBAccess;
 using DataAccess.Models;
+using static DataAccess.Data.BookData;
 
 namespace DataAccess.Data;
 public class UserData : DataContext, IUserData
@@ -39,6 +40,16 @@ public class UserData : DataContext, IUserData
             throw new UserNotFoundException("User not found");
 
         return results.FirstOrDefault();
+    }
+
+    public async Task<IEnumerable<User>> GetUsers()
+    {
+        var results = await _db.LoadData<User, dynamic>("dbo.spUser_GetAll", new { });
+
+        if (!results.Any())
+            throw new UserNotFoundException("User not found");
+
+        return results;
     }
 
     public async Task<int> InsertUser(User user)

@@ -2,6 +2,7 @@
 @inject NavigationManager navManager
 @inject IUserData userData
 @inject IBookData bookData
+@inject IAuthorData authorData
 @inject IJSRuntime JS
 
 <h1>Add Book</h1>
@@ -40,6 +41,15 @@
                     <label >Quantity Available</label>
                     <InputNumber TValue="int" @bind-Value="@bookModel.QuantityAvailable" id="q" name="q" required />
                 </div>
+                <div class="form-group">
+                    <label>Author</label>
+                    <InputSelect TValue="int" @bind-Value="@authorId">
+                        @foreach (var author in authors)
+                        {
+                            <option value="@author.AuthorId"> @author.FirstName @author.LastName</option>
+                        }
+                    </InputSelect>
+                </div>
             </div>
             <div class="form-group">
                 <input @onclick="HandleSubmit" style="margin:10px 0 10px 0" type="submit" value="Create" class="btn btn-primary" />
@@ -51,12 +61,14 @@
 <div>
     <a class="btn btn-primary" href="javascript: history.go(-1)">Back to List</a>
 </div>
-@code {
+    @code {
     Book bookModel = new Book();
+    List<Author> authors = new List<Author>();
     User admin = new User();
     string message = "";
     int Id;
     bool notAdmin = false;
+    int authorId;
 
     protected async override Task OnInitializedAsync()
     {
@@ -80,6 +92,8 @@
         {
             notAdmin = true;
         }
+        IEnumerable<Author> authI = await authorData.GetAuthors();
+        authors = authI.ToList();
     }
 
 

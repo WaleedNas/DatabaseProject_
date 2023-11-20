@@ -50,7 +50,7 @@ else
                     </div>
                 </div>
                 <div class="form-group">
-                    <input style="margin:10px 0 10px 0" @onclick="HandleSubmit" type="submit" value="Create" class="btn btn-primary" />
+                    <input style="margin:10px 0 10px 0" @onclick="HandleSubmit" type="submit" value="Edit" class="btn btn-primary" />
                 </div>
             </EditForm>
         </div>
@@ -121,7 +121,7 @@ else
             message = "User Update Error";
         }
 
-        navManager.NavigateTo("/Admin");
+        navManager.NavigateTo("/Admin?" + admin.UserId);
 
     }
 

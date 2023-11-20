@@ -93,8 +93,8 @@ else
             notAdmin = true;
         }
 
-         // Get All Authors
-         // set authors to list
+        IEnumerable<Author> authorList = await authorData.GetAuthors();
+        authors = authorList.ToList();
     }
 
     private void HandleEdit(int id)
@@ -104,7 +104,11 @@ else
     private async Task HandleDelete(int id)
     {
 
-
+        var _Books = await bookData.GetBooksByAuthor(id);
+        foreach (var book in _Books)
+        {
+            await bookData.DeleteBook(book.BookId); 
+        }
         var response = await authorData.DeleteAuthor(id);
 
         authors = authors.Where(author => author.AuthorId != id).ToList();
