@@ -9,6 +9,7 @@ AS
 			Quantity
 		FROM OrderItem
 		WHERE
-			OrderId = @OrderId;
+			OrderId = @OrderId
+		ORDER BY BookId;
 	END
 RETURN 0

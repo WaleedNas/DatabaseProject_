@@ -44,9 +44,28 @@ namespace DataAccess.Data
             return results;
         }
 
+        public async Task<IEnumerable<Book>> GetBooksByOrder(int orderId)
+        {
+            var results = await _db.LoadData<Book, dynamic>("dbo.spBook_GetByOrder", new
+            {
+                OrderId = orderId
+            });
+
+            if (!results.Any())
+                throw new BookNotFoundException("Book not found");
+
+            return results;
+        }
+
         public async Task<int> InsertBook(Book book)
         {
             return await _db.SaveData("dbo.spBook_Insert", book); // returns new book id
+        }
+
+        public async Task<int> InsertBookAuthor(int bookId, int authorId)
+        {
+            return await _db.SaveData("dbo.spBookAuthors_Insert", 
+                new {BookId = bookId, AuthorId = authorId}); // returns new bookauthor id
         }
 
         public async Task<int> UpdateBook(Book book)
