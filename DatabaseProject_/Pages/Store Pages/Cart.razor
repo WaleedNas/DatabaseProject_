@@ -26,19 +26,20 @@
         }
         else
         {
-            @for (var i = 0; i < Books.Count; i++)
+            @foreach (var book in Books)
             {
                 <div class="box" style="display: flex;">
                     <div style="width: 50%; flex: 1;">
                         <h2>
-                            @Books[i].Title
+                            @book.Title
                         </h2>
-                        <p>@Books[i].PublicationDate</p>
-                        <p>@Books[i].Publisher</p>
-                        <p>AED @Books[i].Price</p>
+                        <p>@book.PublicationDate</p>
+                        <p>@book.Publisher</p>
+                        <p>AED @book.Price</p>
+                        <NavLink class="btn btn-danger" @onclick="() => HandleRemoval(book.BookId)">Remove from Cart</NavLink>
                     </div>
                     <div class="img-box" style="flex: 1;">
-                        <img src=@ImageConverter.BytesToSrc(Books[i].CoverImage) alt="Book Cover" style="">
+                        <img src=@ImageConverter.BytesToSrc(book.CoverImage) alt="Book Cover" style="">
                     </div>
                 </div>
             }
@@ -117,4 +118,12 @@
         navManager.NavigateTo("/cart/" + UserId, true);
     }
 
+    private async Task HandleRemoval(int BookId)
+    {
+        await orderItemData.DeleteOrderItem(CartOrder.OrderId, BookId);
+        Books = Books.Where(book => book.BookId != BookId).ToList();
+
+        // Manually trigger component render
+        StateHasChanged();
+    }
 }

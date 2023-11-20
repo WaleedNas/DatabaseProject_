@@ -63,7 +63,7 @@
                     @if (userModel.UserType != UserType.Admin)
                     {
                         <a href=@($"/cart/{userModel.UserId}")>
-                            <i class="fa fa-shopping-bag">Cart</i> @*logo for cart*@
+                            <i class="fa fa-shopping-bag">Cart</i>
                         </a>
                     }
                 }
@@ -94,6 +94,7 @@
         var queryString = uri.Query;
         if (!string.IsNullOrWhiteSpace(queryString))
         {
+            
             Id = int.Parse(queryString.Substring(1));
         }
         try
