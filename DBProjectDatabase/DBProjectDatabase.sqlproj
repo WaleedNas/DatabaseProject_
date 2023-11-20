@@ -64,6 +64,7 @@
     <Folder Include="dbo\StoredProcedures\Order" />
     <Folder Include="dbo\StoredProcedures\OrderItem" />
     <Folder Include="dbo\StoredProcedures\Author" />
+    <Folder Include="dbo\StoredProcedures\BookAuthors" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="dbo\Tables\Book.sql" />
@@ -99,6 +100,8 @@
     <Build Include="dbo\StoredProcedures\Author\spAuthor_Delete.sql" />
     <Build Include="dbo\StoredProcedures\Book\spBook_GetByAuthor.sql" />
     <Build Include="dbo\StoredProcedures\Author\spAuthor_GetByBook.sql" />
+    <Build Include="dbo\StoredProcedures\BookAuthors\spBookAuthors_DeleteByBook.sql" />
+    <Build Include="dbo\StoredProcedures\BookAuthors\spBookAuthors_DeleteByAuthor.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="DBProjectDatabase.publish.xml" />

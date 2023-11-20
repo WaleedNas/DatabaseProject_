@@ -67,6 +67,7 @@ public class AuthorData : DataContext, IAuthorData
 
     public async Task<int> DeleteAuthor(int authorId)
     {
+        await _db.SaveData("dbo.spBookAuthors_DeleteByAuthor", new { AuthorId = authorId });
         return await _db.SaveData("dbo.spAuthor_Delete", new { AuthorId = authorId });
     }
 
