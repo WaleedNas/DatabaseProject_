@@ -43,7 +43,7 @@ else
                     </div>
                     <div class="form-group">
                         <label for="type">Type</label>
-                        <InputSelect TValue="UserType" Value="type" ValueExpression="() => type" required>
+                        <InputSelect TValue="UserType" @bind-Value="type" required>
                             <option value="@UserType.User">User</option>
                             <option value="@UserType.Admin">Admin</option>
                         </InputSelect>
