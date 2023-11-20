@@ -56,6 +56,7 @@ namespace DataAccess.Data
 
         public async Task<int> DeleteBook(int bookId)
         {
+            await _db.SaveData("dbo.spBookAuthors_DeleteByBook", new { BookId = bookId });
             return await _db.SaveData("dbo.spBook_Delete", new { BookId = bookId }); // returns book id
         }
 
