@@ -50,6 +50,10 @@
                         }
                     </InputSelect>
                 </div>
+                <div class="form-group">
+                    <label>Cover Image</label>
+                    <InputFile OnChange="HandleFileSelection" />
+                </div>
             </div>
             <div class="form-group">
                 <input @onclick="HandleSubmit" style="margin:10px 0 10px 0" type="submit" value="Create" class="btn btn-primary" />
@@ -69,6 +73,8 @@
     int Id;
     bool notAdmin = false;
     int authorId;
+    private IBrowserFile selectedFile;
+
 
     protected async override Task OnInitializedAsync()
     {
@@ -112,6 +118,22 @@
 
         navManager.NavigateTo("/BookAdmin?" + admin.UserId);
 
+    }
+
+    void HandleFileSelection(InputFileChangeEventArgs eventArgs)
+    {
+        const int Max = 1;
+        selectedFile = eventArgs.GetMultipleFiles(Max).FirstOrDefault();
+        if (selectedFile != null)
+        {
+            using (var memoryStream = new MemoryStream())
+            {
+                selectedFile.OpenReadStream().CopyTo(memoryStream);
+                byte[] imageBytes = memoryStream.ToArray();
+
+                bookModel.CoverImage = imageBytes;
+            }
+        }
     }
 
 }
