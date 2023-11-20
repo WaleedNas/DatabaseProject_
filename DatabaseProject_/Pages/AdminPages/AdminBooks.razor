@@ -10,7 +10,7 @@
     <h1>Unauthorized Access</h1>
 } else
 {
-    <h1>Users</h1>
+    <h1>Books</h1>
 
     <p>
         <NavLink style="margin:10px 0 20px 0" class="btn btn-primary" @onclick="HandleCreatePage">Add User</NavLink>
@@ -91,6 +91,8 @@
             notAdmin = true;
         }
 
+        IEnumerable<Book> booksI = await bookData.GetBooks();
+        books = booksI.ToList();
     }
 
     private void HandleEdit(int id)
