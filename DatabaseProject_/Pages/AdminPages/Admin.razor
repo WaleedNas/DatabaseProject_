@@ -92,7 +92,7 @@
 
     private void HandleEdit(int id)
     {
-        navManager.NavigateTo("/UserEdit?" + id);
+        navManager.NavigateTo("/UserEdit?" + admin.UserId + "+" + id);
     }
     private async Task HandleDelete(int id)
     {

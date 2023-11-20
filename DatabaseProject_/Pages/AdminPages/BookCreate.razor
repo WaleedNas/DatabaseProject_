@@ -1,6 +1,7 @@
 ﻿@page "/BookCreate"
 @inject NavigationManager navManager
 @inject IUserData userData
+@inject IBookData bookData
 @inject IJSRuntime JS
 
 <h1>Add Book</h1>
@@ -8,38 +9,36 @@
 <hr />
 <div class="row">
     <div class="col-md-4">
-        <EditForm Model="userModel" method="post">
+        <EditForm Model="bookModel" method="post">
             <div class="group-left">
                 <div class="form-group">
-                    <label for="username">First Name</label>
-                    <InputText @bind-value="userModel.FirstName" type="text" id="firstname" name="firstname" required />
+                    <label >Title</label>
+                    <InputText @bind-value="@bookModel.Title" type="text" id="title" name="title" required />
                 </div>
                 <div class="form-group">
-                    <label for="password">Last Name</label>
-                    <InputText @bind-value="userModel.LastName" type="text" id="lastname" name="lastname" required />
+                    <label >Description</label>
+                    <InputText @bind-value="@bookModel.Description" type="text" id="desc" name="desc" required />
                 </div>
                 <div class="form-group">
-                    <label for="username">Username</label>
-                    <InputText @bind-value="userModel.Username" type="text" id="username" name="username" required />
+                    <label>Publication Date</label>
+                    <InputDate TValue="DateTime?" @bind-value="@bookModel.PublicationDate"  id="date" name="date" required />
                 </div>
+
 
             </div>
             <div class="group-right">
 
                 <div class="form-group">
-                    <label for="password">Email</label>
-                    <InputText @bind-value="userModel.Email" type="text" id="email" name="email" required />
+                    <label >Price</label>
+                    <InputNumber TValue="decimal" @bind-value="@bookModel.Price" id="price" name="price" required />
                 </div>
                 <div class="form-group">
-                    <label for="password">Password</label>
-                    <InputText @bind-value="userModel.PasswordHash" type="password" id="pass" name="pass" required />
+                    <label >Publisher</label>
+                    <InputText @bind-value="@bookModel.Publisher" typeof="text" id="pub" name="pub" required />
                 </div>
                 <div class="form-group">
-                    <label for="type">Type</label>
-                    <InputSelect TValue="UserType" Value="type" ValueExpression="() => type" required>
-                        <option value="@UserType.User">User</option>
-                        <option value="@UserType.Admin">Admin</option>
-                    </InputSelect>
+                    <label >Quantity Available</label>
+                    <InputNumber TValue="int" @bind-value="@bookModel.QuantityAvailable" id="q" name="q" required />
                 </div>
             </div>
             <div class="form-group">
@@ -53,20 +52,50 @@
     <a class="btn btn-primary" href="javascript: history.go(-1)">Back to List</a>
 </div>
 @code {
-    User userModel = new User();
-    UserType type;
-    private async Task HandleSubmit()
+    Book bookModel = new Book();
+    User admin = new User();
+    string message = "";
+    int Id;
+    bool notAdmin = false;
+
+    protected async override Task OnInitializedAsync()
     {
-        userModel.UserType = type;
+        var uri = new Uri(navManager.Uri);
+
+        var queryString = uri.Query;
+
+        if (!string.IsNullOrWhiteSpace(queryString))
+        {
+            Id = int.Parse(queryString.Substring(1));
+        }
+
         try
         {
-            var response = await userData.InsertUser(userModel);
+            admin = await userData.GetUser(Id);
+        }
+        catch (Exception e)
+        { }
+
+        if (admin.UserType != UserType.Admin)
+        {
+            notAdmin = true;
+        }
+    }
+
+
+    private async Task HandleSubmit()
+    {
+        try
+        {
+            var response = await bookData.InsertBook(bookModel);
 
         }
         catch (Exception e)
         {
-
+            message = "Book Already Exists";
         }
+
+        navManager.NavigateTo("/AdminBooks");
 
     }
 

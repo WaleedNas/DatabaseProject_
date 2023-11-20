@@ -13,57 +13,41 @@
 else
 {
 
-<h1>Book Details</h1>
+    <h1>Book Details</h1>
 
     <div style="margin-bottom:20px">
         <hr />
         <dl class="row">
             <dt class="col-sm-2">
-                Title
+                First Name
             </dt>
             <dd class="col-sm-10">
-                @bookModel.Title
+                @authorModel.FirstName
+            </dd>
+            <dt class="col-sm-2">
+                Last Name
+            </dt>
+            <dd class="col-sm-10">
+                @authorModel.LastName
             </dd>
             <dt class="col-sm-2">
                 Description
             </dt>
             <dd class="col-sm-10">
-                @bookModel.Description
+                @authorModel.Description
             </dd>
             <dt class="col-sm-2">
-                Author(s)
+                Books
             </dt>
             <dd class="col-sm-10">
-                @foreach (var author in authors)
-				{
-					<p>@author.FirstName @author.LastName
-					</p>
-				}
+                @foreach (var book in books)
+                {
+                    <p>
+                        @book.Title
+                    </p>
+                }
             </dd>
-            <dt class="col-sm-2">
-                Publication Date
-            </dt>
-            <dd class="col-sm-10">
-                @bookModel.PublicationDate
-            </dd>
-            <dt class="col-sm-2">
-                Price
-            </dt>
-            <dd class="col-sm-10">
-                @bookModel.Price
-            </dd>
-            <dt class="col-sm-2">
-                Quantity
-            </dt>
-            <dd class="col-sm-10">
-                @bookModel.QuantityAvailable
-            </dd>
-            <dt class="col-sm-2">
-                Publisher
-            </dt>
-            <dd class="col-sm-10">
-                @bookModel.Publisher
-            </dd>
+            
         </dl>
     </div>
     <div>
@@ -74,9 +58,8 @@ else
 }
 
 @code {
-    // get user id from url
-    Book bookModel = new Book();
-    List<Author> authors = new List<Author>();
+    Author authorModel = new Author();
+    List<Book> books = new List<Book>();
     int Id;
     int adminId;
     bool notAdmin = false;
@@ -107,9 +90,9 @@ else
         try
         {
             admin = await userData.GetUser(adminId);
-            bookModel = await bookData.GetBook(Id);
-            IEnumerable<Author> authI = await authorData.GetAuthorsOfBook(bookModel.BookId);
-            authors = authI.ToList();
+            authorModel = await authorData.GetAuthor(Id);
+            IEnumerable<Book> bookI = await bookData.GetBooksByAuthor(authorModel.AuthorId);
+            books = bookI.ToList();
         }
         catch (Exception e)
         { }

@@ -1,34 +1,36 @@
-﻿@page "/BookAdmin"
+﻿@page "/AdminAuthor"
 @inject NavigationManager navManager
 @inject IUserData userData
 @inject IBookData bookData
+@inject IAuthorData authorData
 @inject IJSRuntime JS
 
 <PageTitle>VBStore</PageTitle>
 @if (notAdmin)
 {
     <h1>Unauthorized Access</h1>
-} else
+}
+else
 {
     <h1>Books</h1>
 
     <p>
-        <NavLink style="margin:10px 0 20px 0" class="btn btn-primary" @onclick="HandleCreatePage">Add Book</NavLink>
+        <NavLink style="margin:10px 0 20px 0" class="btn btn-primary" @onclick="HandleCreatePage">Add Author</NavLink>
         <NavLink style="color:#040404; margin-left:70rem" class="btn btn-link" @onclick="HandleAdminPage">Users</NavLink>
-        <NavLink style="color:#040404;" class="btn btn-link" @onclick="HandleAuthorPage">Authors</NavLink>
+        <NavLink style="color:#040404;" class="btn btn-link" @onclick="HandleBookPage">Books</NavLink>
     </p>
 
     <table class="table">
         <thead>
             <tr>
                 <th>
-                    Title
+                    First Name
                 </th>
                 <th>
-                    Price
+                    Last Name
                 </th>
                 <th>
-                    Publishers
+                    Description
                 </th>
 
 
@@ -36,22 +38,22 @@
             </tr>
         </thead>
         <tbody>
-            @foreach (Book book in books)
+            @foreach (var author in authors)
             {
                 <tr>
                     <td style="width: 50%">
-                        @book.Title
+                        @author.FirstName
                     </td>
                     <td>
-                        @book.Price
+                        @author.LastName
                     </td>
                     <td>
-                        @book.Publisher
+                        @author.Description
                     </td>
                     <td>
-                        <NavLink class="btn btn-primary" @onclick="() => HandleEdit(book.BookId)">Edit</NavLink> |
-                        <NavLink class="btn btn-primary" @onclick="() => HandleDetails(book.BookId)">Details</NavLink> |
-                        <NavLink class="btn btn-danger" @onclick="() => HandleDelete(book.BookId)">Delete</NavLink>
+                        <NavLink class="btn btn-primary" @onclick="() => HandleEdit(author.AuthorId)">Edit</NavLink> |
+                        <NavLink class="btn btn-primary" @onclick="() => HandleDetails(author.AuthorId)">Details</NavLink> |
+                        <NavLink class="btn btn-danger" @onclick="() => HandleDelete(author.AuthorId)">Delete</NavLink>
                     </td>
                 </tr>
             }
@@ -65,7 +67,7 @@
 
     int Id;
     bool notAdmin = false;
-    List<Book> books = new List<Book>();
+    List<Author> authors = new List<Author>();
     User admin = new User();
 
     protected override async Task OnInitializedAsync()
@@ -91,8 +93,8 @@
             notAdmin = true;
         }
 
-        IEnumerable<Book> booksI = await bookData.GetBooks();
-        books = booksI.ToList();
+         // Get All Authors
+         // set authors to list
     }
 
     private void HandleEdit(int id)
@@ -102,10 +104,10 @@
     private async Task HandleDelete(int id)
     {
 
-        
-        var response = await bookData.DeleteBook(id);
 
-        books = books.Where(book => book.BookId != id).ToList();
+        var response = await authorData.DeleteAuthor(id);
+
+        authors = authors.Where(author => author.AuthorId != id).ToList();
 
         // Manually trigger component render
         StateHasChanged();
@@ -115,12 +117,12 @@
     private void HandleDetails(int id)
     {
 
-        navManager.NavigateTo("/BookDetails?" + admin.UserId + "+" + id);
+        navManager.NavigateTo("/AuthorDetails?" + admin.UserId + "+" + id);
     }
 
     private void HandleCreatePage()
     {
-        navManager.NavigateTo("/BookCreate?" + admin.UserId);
+        navManager.NavigateTo("/AuthorCreate?" + admin.UserId);
 
     }
 
@@ -129,9 +131,9 @@
         navManager.NavigateTo("/Admin?" + admin.UserId);
 
     }
-    private void HandleAuthorPage()
+    private void HandleBookPage()
     {
-        navManager.NavigateTo("/AdminAuthor?" + admin.UserId);
+        navManager.NavigateTo("/BookAdmin?" + admin.UserId);
 
     }
 }

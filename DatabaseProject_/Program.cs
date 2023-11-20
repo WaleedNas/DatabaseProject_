@@ -13,6 +13,7 @@ builder.Services.AddHttpContextAccessor();
 builder.Services.AddSingleton<ISqlDataAccess, SqlDataAccess>();
 
 builder.Services.AddSingleton<IUserData, UserData>();
+builder.Services.AddSingleton<IAuthorData, AuthorData>();
 builder.Services.AddSingleton<IBookData, BookData>();
 builder.Services.AddSingleton<IOrderData, OrderData>();
 builder.Services.AddSingleton<IOrderItemData, OrderItemData>();
