@@ -30,10 +30,15 @@
                 </div>
             </div>
         }
-        <div class="btn-box">
-            <a style="cursor: pointer;" onclick="@HandleAdd">
-                Add To Cart
-            </a>
+        <div>
+            <div class="btn-box">
+                <a style="cursor: pointer;" onclick="@HandleAdd" hidden="@IsAdded">
+                    Add To Cart
+                </a>
+            </div>
+            <div class="btn-box" style="background-color: green; color: white;" hidden="@(!IsAdded)">
+                Added To Cart
+            </div>
         </div>
     </div>
 </section>
@@ -48,6 +53,8 @@
     public Book Book { get; set; }
 
     private bool IsLoggedIn { get; set; }
+
+    private bool IsAdded { get; set; }
 
     protected override async Task OnInitializedAsync()
     {
@@ -112,6 +119,9 @@
                     OrderId = order.OrderId,
                     Quantity = 1
                 });
+
+                IsAdded = true;
+                StateHasChanged();
 
                 break;
             }
