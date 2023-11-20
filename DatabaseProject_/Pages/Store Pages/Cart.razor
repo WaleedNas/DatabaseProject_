@@ -1,0 +1,89 @@
+﻿@page "/cart/{UserId:int}"
+@using DatabaseProject_.Util
+@using System.Diagnostics.Eventing.Reader
+@inject NavigationManager navManager
+@inject IUserData userData
+@inject IBookData bookData
+@inject IOrderData orderData
+@inject IOrderItemData orderItemData
+@inject IJSRuntime JS
+
+<PageTitle>Cart</PageTitle>
+
+<section class="shop_section layout_padding">
+    <div class="container">
+        @if (!HasCart)
+        {
+            <h2>You have nothing in the cart</h2>
+        }
+        else
+        {
+            @for (var i = 0; i < Books.Count; i++)
+            {
+                <div class="box">
+                    <div style="width: 50%;">
+                        <h2>
+                            @Books[i].Title
+                        </h2>
+                        <p>@Books[i].Description</p>
+                        <p>@Books[i].PublicationDate</p>
+                        <p>@Books[i].Publisher</p>
+                        <p>AED @Books[i].Price</p>
+                    </div>
+                    <div class="img-box">
+                        <img src=@ImageConverter.BytesToSrc(Books[i].CoverImage) alt="Book Cover">
+                    </div>
+                </div>
+            }
+        }
+
+    </div>
+</section>
+
+@code {
+
+    [Parameter]
+    public int UserId { get; set; }
+
+    public Order? CartOrder { get; set; }
+
+    private List<OrderItem> OrderItems { get; set; } = new();
+    private List<Book> Books { get; set; } = new();
+
+    private bool HasCart { get; set; } = true;
+
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+            var orders = (await orderData.GetOrdersByUser(UserId)).ToList();
+
+            CartOrder = orders.FirstOrDefault(o => o.Status == OrderStatus.Pending);
+            if (CartOrder == null)
+                throw new OrderData.OrderNotFoundException();
+        }
+        catch (OrderData.OrderNotFoundException e)
+        {
+            HasCart = false;
+            return;
+        }
+
+        try
+        {
+            OrderItems = (await orderItemData.GetOrderItems(CartOrder.OrderId)).ToList();
+            Books = (await bookData.GetBooksByOrder(CartOrder.OrderId)).ToList();
+        }
+        catch (OrderItemData.OrderItemNotFoundException e)
+        {
+            HasCart = false;
+            return;
+        }
+        catch (BookData.BookNotFoundException e)
+        {
+            HasCart = false;
+            return;
+        }
+        
+    }
+
+}

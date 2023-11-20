@@ -104,6 +104,8 @@
     <Build Include="dbo\StoredProcedures\BookAuthors\spBookAuthors_DeleteByAuthor.sql" />
     <Build Include="dbo\StoredProcedures\User\spUser_GetAll.sql" />
     <Build Include="dbo\StoredProcedures\Author\spAuthor_GetAll.sql" />
+    <Build Include="dbo\StoredProcedures\Book\spBook_GetByOrder.sql" />
+    <Build Include="dbo\StoredProcedures\BookAuthors\spBookAuthors_Insert.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="DBProjectDatabase.publish.xml" />
