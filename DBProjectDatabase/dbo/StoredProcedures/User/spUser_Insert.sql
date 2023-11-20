@@ -8,7 +8,6 @@
 	@UserType INT
 AS
 	BEGIN
-		SET NOCOUNT ON;
 		INSERT INTO [dbo].[User] (FirstName, LastName, Username, PasswordHash, Email, UserType) 
 		VALUES (@FirstName, @LastName, @Username, @PasswordHash, @Email, @UserType)
 		
